@@ -24,5 +24,6 @@
     <modules>
         <module>chronos-model</module>
         <module>chronos-dal</module>
+        <module>chronos-gui</module>
     </modules>
 </project>
