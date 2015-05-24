@@ -15,28 +15,28 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
     private IChronosURI chronosURI;
 
     @Override
-    public ChronosTasks get() {
-        try {
-            String uri = chronosURI.getURI();
-            String content = new String(Files.readAllBytes(Paths.get(uri)));
+    public ChronosTasks get() throws ChronosDALException {
+        String uri = chronosURI.getURI();
+        String content;
 
-            return chronosSerializer.deserialize(content);
+        try {
+            content = new String(Files.readAllBytes(Paths.get(uri)));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ChronosDALException("Couldn't read file content.", e);
         }
 
-        return null;
+        return chronosSerializer.deserialize(content);
     }
 
     @Override
-    public void save(ChronosTasks chronosTasks) {
+    public void save(ChronosTasks chronosTasks) throws ChronosDALException {
         String data = chronosSerializer.serialize(chronosTasks);
         String uri = chronosURI.getURI();
 
         try {
             Files.write(Paths.get(uri), data.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ChronosDALException("Couldn't write to file.", e);
         }
     }
 }

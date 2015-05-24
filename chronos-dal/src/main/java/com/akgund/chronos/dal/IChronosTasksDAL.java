@@ -3,7 +3,7 @@ package com.akgund.chronos.dal;
 import com.akgund.chronos.model.ChronosTasks;
 
 public interface IChronosTasksDAL {
-    ChronosTasks get();
+    ChronosTasks get() throws ChronosDALException;
 
-    void save(ChronosTasks chronosTasks);
+    void save(ChronosTasks chronosTasks) throws ChronosDALException;
 }
