@@ -1,0 +1,25 @@
+*.class
+bin/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Backup files
+*~
+
+# intellij
+.idea/
+*.iml
+
+# eclipse
+.classpath
+.project
+.settings/
+
+# maven
+target/
+
+# virtual machine crash logs
+hs_err_pid*
