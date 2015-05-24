@@ -1,4 +1,4 @@
-package com.akgund.chronos.dal;
+package com.akgund.chronos.util;
 
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
