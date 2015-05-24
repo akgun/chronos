@@ -6,7 +6,9 @@ import com.akgund.chronos.model.ChronosTasks;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public class FileChronosTasksDAL implements IChronosTasksDAL {
     @Inject
@@ -34,7 +36,14 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
         String uri = chronosURI.getURI();
 
         try {
-            Files.write(Paths.get(uri), data.getBytes());
+            Path path = Paths.get(uri);
+
+            if (!Files.exists(path)) {
+                Files.createDirectories(path.getParent());
+                Files.createFile(path);
+            }
+
+            Files.write(path, data.getBytes(), StandardOpenOption.CREATE);
         } catch (IOException e) {
             throw new ChronosDALException("Couldn't write to file.", e);
         }

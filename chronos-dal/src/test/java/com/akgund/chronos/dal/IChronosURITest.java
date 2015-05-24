@@ -10,7 +10,7 @@ public class IChronosURITest {
     public void testGetURI() {
         IChronosURI iChronosURI = CDIFactory.getInstance().inject(IChronosURI.class);
         String uri = iChronosURI.getURI();
-        assertEquals("C:\\Users\\akgun\\.chronos\\chronos.xml", uri);
+        assertEquals("C:\\Users\\akgun\\.chronos\\chronos.json", uri);
         CDIFactory.getInstance().dispose();
     }
 }

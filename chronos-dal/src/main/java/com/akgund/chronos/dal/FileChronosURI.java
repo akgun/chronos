@@ -21,6 +21,6 @@ public class FileChronosURI implements IChronosURI {
     }
 
     public String chronosDataFile() {
-        return "chronos.xml";
+        return "chronos.json";
     }
 }
