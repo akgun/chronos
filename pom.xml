@@ -38,10 +38,8 @@
         </plugins>
     </build>
     <modules>
-        <module>chronos-model</module>
-        <module>chronos-dal</module>
         <module>chronos-gui</module>
         <module>chronos-util</module>
-        <module>chronos-service</module>
+        <module>chronos-core</module>
     </modules>
 </project>
