@@ -42,9 +42,9 @@
             <version>2.3.1</version>
         </dependency>
         <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
+            <groupId>com.darwinsys</groupId>
+            <artifactId>hirondelle-date4j</artifactId>
+            <version>1.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.weld.se</groupId>
