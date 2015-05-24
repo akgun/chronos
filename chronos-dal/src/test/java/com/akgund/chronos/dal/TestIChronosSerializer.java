@@ -1,7 +1,5 @@
 package com.akgund.chronos.dal;
 
-import com.akgund.chronos.dal.serializer.GsonChronosSerializer;
-import com.akgund.chronos.dal.serializer.IChronosSerializer;
 import com.akgund.chronos.model.ChronosTasks;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
@@ -13,7 +11,7 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class GsonChronosSerializerTest {
+public class TestIChronosSerializer {
     private IChronosSerializer chronosSerializer = new GsonChronosSerializer();
 
     @Test

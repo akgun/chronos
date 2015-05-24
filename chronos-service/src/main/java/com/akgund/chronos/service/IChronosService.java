@@ -1,8 +1,10 @@
 package com.akgund.chronos.service;
 
-import com.akgund.chronos.model.ChronosTasks;
+import com.akgund.chronos.model.Task;
+
+import java.util.List;
 
 public interface IChronosService {
 
-    ChronosTasks listTasks();
+    List<Task> listTasks();
 }

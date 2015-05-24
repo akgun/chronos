@@ -1,5 +1,7 @@
 package com.akgund.chronos.dal;
 
+import com.akgund.chronos.dal.FileChronosURI;
+
 import javax.enterprise.inject.Alternative;
 
 @Alternative

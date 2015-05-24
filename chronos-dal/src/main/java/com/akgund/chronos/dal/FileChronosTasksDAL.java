@@ -1,6 +1,5 @@
 package com.akgund.chronos.dal;
 
-import com.akgund.chronos.dal.serializer.IChronosSerializer;
 import com.akgund.chronos.model.ChronosTasks;
 
 import javax.inject.Inject;

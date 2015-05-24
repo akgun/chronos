@@ -1,4 +1,4 @@
-package com.akgund.chronos.dal.serializer;
+package com.akgund.chronos.dal;
 
 import com.akgund.chronos.model.ChronosTasks;
 
