@@ -26,5 +26,6 @@
         <module>chronos-dal</module>
         <module>chronos-gui</module>
         <module>chronos-util</module>
+        <module>chronos-service</module>
     </modules>
 </project>
