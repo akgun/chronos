@@ -23,5 +23,6 @@
     </build>
     <modules>
         <module>chronos-model</module>
+        <module>chronos-dal</module>
     </modules>
 </project>

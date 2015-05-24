@@ -3,9 +3,18 @@ package com.akgund.chronos.model;
 import hirondelle.date4j.DateTime;
 
 public class Work {
+    private Long id;
     private DateTime start;
     private DateTime end;
     private String comment;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public DateTime getStart() {
         return start;
