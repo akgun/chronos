@@ -18,7 +18,16 @@
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>com.akgund.chronos</groupId>
+            <artifactId>chronos-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.akgund.chronos</groupId>
+            <artifactId>chronos-util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -35,7 +44,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.akgund.chronos.gui.ChronosGUI</mainClass>
+                    <mainClass>com.akgund.chronos.gui.Program</mainClass>
                 </configuration>
             </plugin>
         </plugins>
