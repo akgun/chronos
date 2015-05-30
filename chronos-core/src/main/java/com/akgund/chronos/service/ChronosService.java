@@ -5,12 +5,11 @@ import com.akgund.chronos.core.IChronosTasksDAL;
 import com.akgund.chronos.model.ChronosTasks;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
-import hirondelle.date4j.DateTime;
+import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimeZone;
 
 public class ChronosService implements IChronosService {
 
@@ -37,7 +36,7 @@ public class ChronosService implements IChronosService {
     }
 
     private long generateId() {
-        return DateTime.now(TimeZone.getDefault()).getMilliseconds(TimeZone.getDefault());
+        return DateTime.now().getMillis();
     }
 
     @Override
@@ -51,7 +50,7 @@ public class ChronosService implements IChronosService {
 
         task.setActive(true);
         Work newWork = new Work();
-        newWork.setStart(DateTime.now(TimeZone.getDefault()));
+        newWork.setStart(DateTime.now());
         task.getWorkList().add(newWork);
 
         saveTask(task);
@@ -67,7 +66,7 @@ public class ChronosService implements IChronosService {
             List<Work> workList = activeTask.getWorkList();
             if (workList != null && !workList.isEmpty()) {
                 Work lastWork = workList.get(workList.size() - 1);
-                lastWork.setEnd(DateTime.now(TimeZone.getDefault()));
+                lastWork.setEnd(DateTime.now());
             }
             saveTask(activeTask);
         }

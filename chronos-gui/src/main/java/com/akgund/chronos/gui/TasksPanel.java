@@ -12,8 +12,9 @@ import java.util.List;
 public class TasksPanel extends JPanel {
     private IChronosService chronosService = CDIFactory.getInstance().inject(IChronosService.class);
     private JComboBox<TaskComboBoxItem> comboBoxTasks = new JComboBox<>();
+    private JPanel workPanel = new JPanel();
 
-    public TasksPanel() {
+    public TasksPanel(ChronosGUI parent) {
         setLayout(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();
@@ -31,6 +32,18 @@ public class TasksPanel extends JPanel {
         c.weightx = 1;
         add(comboBoxTasks, c);
 
+        comboBoxTasks.addActionListener((actionEvent) -> {
+            workPanel.removeAll();
+
+            Task selectedTask = getSelectedTask();
+            if (selectedTask == null) {
+                return;
+            }
+
+            workPanel.add(new WorkPanel(selectedTask.getWorkList()), BorderLayout.CENTER);
+            parent.pack();
+        });
+
         fillTasksCombo();
 
         JButton buttonAdd = new JButton("+");
@@ -44,6 +57,22 @@ public class TasksPanel extends JPanel {
         c.gridx++;
         c.weightx = 0;
         add(buttonAdd, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.gridwidth = 3;
+
+        workPanel.setLayout(new BorderLayout());
+        add(workPanel, c);
+    }
+
+    public Task getSelectedTask() {
+        TaskComboBoxItem selectedItem = (TaskComboBoxItem) comboBoxTasks.getSelectedItem();
+        Task task = selectedItem.getValue();
+
+        return task;
     }
 
     private void fillTasksCombo() {

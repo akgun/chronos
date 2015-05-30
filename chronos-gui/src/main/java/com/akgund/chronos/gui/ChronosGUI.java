@@ -9,7 +9,7 @@ public class ChronosGUI extends JFrame {
         setTitle("Chronos Time Tracker");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setContentPane(new MainPanel());
+        setContentPane(new MainPanel(this));
         pack();
     }
 }

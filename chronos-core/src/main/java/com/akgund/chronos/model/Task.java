@@ -1,5 +1,8 @@
 package com.akgund.chronos.model;
 
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +11,22 @@ public class Task {
     private String name;
     private List<Work> workList;
     private boolean active;
+
+    public Duration getTotalWork() {
+        Duration total = Duration.millis(0);
+
+        for (Work work : getWorkList()) {
+            DateTime start = work.getStart();
+            DateTime end = work.getEnd();
+            if (end == null) {
+                end = DateTime.now();
+            }
+
+            total = total.plus(new Duration(start, end));
+        }
+
+        return total;
+    }
 
     public Task() {
         workList = new ArrayList<>();

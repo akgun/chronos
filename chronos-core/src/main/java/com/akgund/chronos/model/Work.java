@@ -1,6 +1,6 @@
 package com.akgund.chronos.model;
 
-import hirondelle.date4j.DateTime;
+import org.joda.time.DateTime;
 
 public class Work {
     private Long id;
