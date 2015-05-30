@@ -1,4 +1,4 @@
-package com.akgund.chronos.dal;
+package com.akgund.chronos.core;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

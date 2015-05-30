@@ -1,4 +1,4 @@
-package com.akgund.chronos.dal;
+package com.akgund.chronos.core;
 
 
 import com.akgund.chronos.model.ChronosTasks;
@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Collections;
 
 public class FileChronosTasksDAL implements IChronosTasksDAL {
     @Inject
@@ -17,21 +18,26 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
     private IChronosURI chronosURI;
 
     @Override
-    public ChronosTasks get() throws ChronosDALException {
+    public ChronosTasks get() throws ChronosCoreException {
         String uri = chronosURI.getURI();
         String content;
 
         try {
             content = new String(Files.readAllBytes(Paths.get(uri)));
         } catch (IOException e) {
-            throw new ChronosDALException("Couldn't read file content.", e);
+            throw new ChronosCoreException("Couldn't read file content.", e);
         }
+        ChronosTasks chronosTasks = chronosSerializer.deserialize(content);
 
-        return chronosSerializer.deserialize(content);
+        Collections.sort(chronosTasks.getAllTasks(), new TaskComparator());
+
+        return chronosTasks;
     }
 
     @Override
-    public void save(ChronosTasks chronosTasks) throws ChronosDALException {
+    public void save(ChronosTasks chronosTasks) throws ChronosCoreException {
+        Collections.sort(chronosTasks.getAllTasks(), new TaskComparator());
+
         String data = chronosSerializer.serialize(chronosTasks);
         String uri = chronosURI.getURI();
 
@@ -45,7 +51,7 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
 
             Files.write(path, data.getBytes(), StandardOpenOption.CREATE);
         } catch (IOException e) {
-            throw new ChronosDALException("Couldn't write to file.", e);
+            throw new ChronosCoreException("Couldn't write to file.", e);
         }
     }
 }

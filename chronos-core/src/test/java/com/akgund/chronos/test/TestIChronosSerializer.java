@@ -1,7 +1,7 @@
 package com.akgund.chronos.test;
 
-import com.akgund.chronos.dal.GsonChronosSerializer;
-import com.akgund.chronos.dal.IChronosSerializer;
+import com.akgund.chronos.core.GsonChronosSerializer;
+import com.akgund.chronos.core.IChronosSerializer;
 import com.akgund.chronos.model.ChronosTasks;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;

@@ -1,4 +1,4 @@
-package com.akgund.chronos.dal;
+package com.akgund.chronos.core;
 
 import com.akgund.chronos.model.ChronosTasks;
 
