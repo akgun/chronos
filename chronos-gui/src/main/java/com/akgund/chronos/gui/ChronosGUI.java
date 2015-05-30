@@ -1,5 +1,8 @@
 package com.akgund.chronos.gui;
 
+import com.akgund.chronos.gui.bus.MessageBus;
+import com.akgund.chronos.gui.bus.MessageType;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -22,6 +25,8 @@ public class ChronosGUI extends JFrame {
         menuItemAddTask.addActionListener((actionEvent) -> {
             AddTaskDialog addTaskDialog = new AddTaskDialog();
             addTaskDialog.setVisible(true);
+
+            MessageBus.getInstance().sendMessage(TasksPanel.class, MessageType.RELOAD_DATA.toString());
         });
         menuSettings.add(menuItemAddTask);
 

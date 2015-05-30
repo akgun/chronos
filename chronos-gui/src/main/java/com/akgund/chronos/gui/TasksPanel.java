@@ -1,6 +1,9 @@
 package com.akgund.chronos.gui;
 
 import com.akgund.chronos.core.ChronosCoreException;
+import com.akgund.chronos.gui.bus.IMessageClient;
+import com.akgund.chronos.gui.bus.MessageBus;
+import com.akgund.chronos.gui.bus.MessageType;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.CDIFactory;
@@ -9,12 +12,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class TasksPanel extends JPanel {
+public class TasksPanel extends JPanel implements IMessageClient {
     private IChronosService chronosService = CDIFactory.getInstance().inject(IChronosService.class);
     private JComboBox<TaskComboBoxItem> comboBoxTasks = new JComboBox<>();
     private JPanel workPanel = new JPanel();
 
     public TasksPanel(ChronosGUI parent) {
+        MessageBus.getInstance().register(this);
         setLayout(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();
@@ -66,7 +70,12 @@ public class TasksPanel extends JPanel {
     }
 
     public Task getSelectedTask() {
-        TaskComboBoxItem selectedItem = (TaskComboBoxItem) comboBoxTasks.getSelectedItem();
+        Object selection = comboBoxTasks.getSelectedItem();
+        if (selection == null) {
+            return null;
+        }
+
+        TaskComboBoxItem selectedItem = (TaskComboBoxItem) selection;
         Task task = selectedItem.getValue();
 
         return task;
@@ -79,8 +88,19 @@ public class TasksPanel extends JPanel {
             for (Task t : tasks) {
                 comboBoxTasks.addItem(new TaskComboBoxItem(t));
             }
+
+            if (tasks != null && !tasks.isEmpty()) {
+                comboBoxTasks.setSelectedItem(tasks.stream().findFirst().get());
+            }
         } catch (ChronosCoreException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void receiveMessage(String message) {
+        if (MessageType.RELOAD_DATA.toString().equals(message)) {
+            fillTasksCombo();
         }
     }
 }
