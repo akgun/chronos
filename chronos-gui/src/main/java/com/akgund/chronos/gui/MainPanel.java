@@ -5,9 +5,9 @@ import java.awt.*;
 
 public class MainPanel extends JPanel {
 
-    public MainPanel(ChronosGUI parent) {
+    public MainPanel() {
         setLayout(new BorderLayout());
 
-        add(new TasksPanel(parent), BorderLayout.CENTER);
+        add(new TasksPanel(), BorderLayout.CENTER);
     }
 }

@@ -17,8 +17,9 @@ public class TasksPanel extends JPanel implements IMessageClient {
     private JComboBox<TaskComboBoxItem> comboBoxTasks = new JComboBox<>();
     private JPanel workPanel = new JPanel();
 
-    public TasksPanel(ChronosGUI parent) {
+    public TasksPanel() {
         MessageBus.getInstance().register(this);
+
         setLayout(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();
@@ -45,7 +46,7 @@ public class TasksPanel extends JPanel implements IMessageClient {
             }
 
             workPanel.add(new WorkPanel(selectedTask.getWorkList()), BorderLayout.CENTER);
-            parent.pack();
+            MessageBus.getInstance().sendMessage(ChronosGUI.class, MessageType.PACK);
         });
 
         fillTasksCombo();
@@ -98,8 +99,8 @@ public class TasksPanel extends JPanel implements IMessageClient {
     }
 
     @Override
-    public void receiveMessage(String message) {
-        if (MessageType.RELOAD_DATA.toString().equals(message)) {
+    public void receiveMessage(MessageType message) {
+        if (MessageType.RELOAD_DATA == message) {
             fillTasksCombo();
         }
     }

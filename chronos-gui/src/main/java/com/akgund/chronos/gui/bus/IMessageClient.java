@@ -2,5 +2,5 @@ package com.akgund.chronos.gui.bus;
 
 public interface IMessageClient {
 
-    void receiveMessage(String message);
+    void receiveMessage(MessageType message);
 }
