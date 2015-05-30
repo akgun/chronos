@@ -8,7 +8,7 @@ import com.akgund.chronos.model.Work;
 import hirondelle.date4j.DateTime;
 
 import javax.inject.Inject;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -20,70 +20,63 @@ public class ChronosService implements IChronosService {
     @Override
     public List<Task> listTasks() throws ChronosCoreException {
         ChronosTasks chronosTasks = chronosTasksDAL.get();
-        return chronosTasks.getAllTasks();
+        return new ArrayList<>(chronosTasks.getTasks().values());
     }
 
     @Override
-    public void addTask(Task task) throws ChronosCoreException {
+    public void saveTask(Task task) throws ChronosCoreException {
         ChronosTasks chronosTasks = chronosTasksDAL.get();
 
+        /* New record. */
         if (task.getId() == null) {
-            task.setId(generateId(chronosTasks));
+            task.setId(generateId());
         }
 
-        chronosTasks.getAllTasks().add(task);
+        chronosTasks.getTasks().put(task.getId(), task);
         chronosTasksDAL.save(chronosTasks);
     }
 
-    private long generateId(ChronosTasks chronosTasks) {
-        if (chronosTasks == null || chronosTasks.getAllTasks() == null || chronosTasks.getAllTasks().isEmpty()) {
-            return 1L;
-        }
-
-        return chronosTasks.getAllTasks().get(chronosTasks.getAllTasks().size() - 1).getId() + 1;
+    private long generateId() {
+        return DateTime.now(TimeZone.getDefault()).getMilliseconds(TimeZone.getDefault());
     }
 
     @Override
     public void activateTask(Long taskId) throws ChronosCoreException, ChronosServiceException {
-        final ChronosTasks chronosTasks = chronosTasksDAL.get();
-
         final Task task = getTask(taskId);
         if (task == null) {
             throw new ChronosServiceException("Could not find task. Task id: " + taskId);
         }
 
-        final Task activeTask = findActiveTask();
-        if (activeTask == null) {
-            throw new ChronosServiceException("Could not find active task.");
-        }
+        deactivateActiveTask();
 
         task.setActive(true);
         Work newWork = new Work();
         newWork.setStart(DateTime.now(TimeZone.getDefault()));
         task.getWorkList().add(newWork);
 
-        activeTask.setActive(false);
-        List<Work> workList1 = activeTask.getWorkList();
-        if (workList1 != null && !workList1.isEmpty()) {
-            Work lastWork = workList1.get(workList1.size() - 1);
-            lastWork.setEnd(DateTime.now(TimeZone.getDefault()));
-        }
-
-        chronosTasksDAL.save(chronosTasks);
+        saveTask(task);
     }
 
+    @Override
+    public void deactivateActiveTask() throws ChronosCoreException {
+        final Task activeTask = findActiveTask();
+
+        /* There is active task. */
+        if (activeTask != null) {
+            activeTask.setActive(false);
+            List<Work> workList = activeTask.getWorkList();
+            if (workList != null && !workList.isEmpty()) {
+                Work lastWork = workList.get(workList.size() - 1);
+                lastWork.setEnd(DateTime.now(TimeZone.getDefault()));
+            }
+            saveTask(activeTask);
+        }
+    }
 
     @Override
     public Task getTask(Long id) throws ChronosCoreException {
-        List<Task> tasks = listTasks();
-
-        for (Task t : tasks) {
-            if (t.getId() == id) {
-                return t;
-            }
-        }
-
-        return null;
+        ChronosTasks chronosTasks = chronosTasksDAL.get();
+        return chronosTasks.getTasks().get(id);
     }
 
     @Override

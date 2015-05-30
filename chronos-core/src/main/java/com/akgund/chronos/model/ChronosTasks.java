@@ -1,20 +1,20 @@
 package com.akgund.chronos.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ChronosTasks {
-    private List<Task> allTasks;
+    private Map<Long, Task> tasks;
 
     public ChronosTasks() {
-        allTasks = new ArrayList<>();
+        tasks = new HashMap<>();
     }
 
-    public List<Task> getAllTasks() {
-        return allTasks;
+    public Map<Long, Task> getTasks() {
+        return tasks;
     }
 
-    public void setAllTasks(List<Task> allTasks) {
-        this.allTasks = allTasks;
+    public void setTasks(Map<Long, Task> tasks) {
+        this.tasks = tasks;
     }
 }

@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Collections;
 
 public class FileChronosTasksDAL implements IChronosTasksDAL {
     @Inject
@@ -23,21 +22,25 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
         String content;
 
         try {
-            content = new String(Files.readAllBytes(Paths.get(uri)));
+            Path path = Paths.get(uri);
+
+            /* Create file if does not exists. */
+            if (!Files.exists(path)) {
+                ChronosTasks chronosTasks = new ChronosTasks();
+                save(chronosTasks);
+            }
+
+            content = new String(Files.readAllBytes(path));
         } catch (IOException e) {
             throw new ChronosCoreException("Couldn't read file content.", e);
         }
         ChronosTasks chronosTasks = chronosSerializer.deserialize(content);
-
-        Collections.sort(chronosTasks.getAllTasks(), new TaskComparator());
 
         return chronosTasks;
     }
 
     @Override
     public void save(ChronosTasks chronosTasks) throws ChronosCoreException {
-        Collections.sort(chronosTasks.getAllTasks(), new TaskComparator());
-
         String data = chronosSerializer.serialize(chronosTasks);
         String uri = chronosURI.getURI();
 
