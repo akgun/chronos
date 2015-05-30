@@ -32,10 +32,23 @@ public class TasksPanel extends JPanel {
         add(comboBoxTasks, c);
 
         fillTasksCombo();
+
+        JButton buttonAdd = new JButton("+");
+        buttonAdd.addActionListener((actionEvent) -> {
+            AddTaskDialog addTaskDialog = new AddTaskDialog();
+            addTaskDialog.setVisible(true);
+
+            fillTasksCombo();
+        });
+
+        c.gridx++;
+        c.weightx = 0;
+        add(buttonAdd, c);
     }
 
     private void fillTasksCombo() {
         try {
+            comboBoxTasks.removeAllItems();
             List<Task> tasks = chronosService.listTasks();
             for (Task t : tasks) {
                 comboBoxTasks.addItem(new TaskComboBoxItem(t));
