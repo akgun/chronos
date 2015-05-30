@@ -5,6 +5,7 @@ import com.akgund.chronos.gui.bus.IMessageClient;
 import com.akgund.chronos.gui.bus.MessageBus;
 import com.akgund.chronos.gui.bus.MessageType;
 import com.akgund.chronos.model.Task;
+import com.akgund.chronos.service.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.CDIFactory;
 
@@ -38,27 +39,32 @@ public class TasksPanel extends JPanel implements IMessageClient {
         add(comboBoxTasks, c);
 
         comboBoxTasks.addActionListener((actionEvent) -> {
-            workPanel.removeAll();
+            updateWorkPanel();
+        });
 
+        fillTasksCombo();
+
+        JButton buttonActivate = new JButton("Activate");
+        buttonActivate.addActionListener((actionEvent) -> {
             Task selectedTask = getSelectedTask();
             if (selectedTask == null) {
                 return;
             }
 
-            workPanel.add(new WorkPanel(selectedTask.getWorkList()), BorderLayout.CENTER);
-            MessageBus.getInstance().sendMessage(ChronosGUI.class, MessageType.PACK);
-        });
+            try {
+                chronosService.activateTask(selectedTask.getId());
+            } catch (ChronosCoreException e) {
+                e.printStackTrace();
+            } catch (ChronosServiceException e) {
+                e.printStackTrace();
+            }
 
-        fillTasksCombo();
-
-        JButton buttonAdd = new JButton("Activate");
-        buttonAdd.addActionListener((actionEvent) -> {
-            System.out.println("activate.");
+            updateWorkPanel();
         });
 
         c.gridx++;
         c.weightx = 0;
-        add(buttonAdd, c);
+        add(buttonActivate, c);
 
         c.gridx = 0;
         c.gridy = 1;
@@ -68,6 +74,18 @@ public class TasksPanel extends JPanel implements IMessageClient {
 
         workPanel.setLayout(new BorderLayout());
         add(workPanel, c);
+    }
+
+    private void updateWorkPanel() {
+        workPanel.removeAll();
+
+        Task selectedTask = getSelectedTask();
+        if (selectedTask == null) {
+            return;
+        }
+
+        workPanel.add(new WorkPanel(selectedTask.getWorkList()), BorderLayout.CENTER);
+        MessageBus.getInstance().sendMessage(ChronosGUI.class, MessageType.PACK);
     }
 
     public Task getSelectedTask() {
