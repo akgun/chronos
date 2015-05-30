@@ -46,12 +46,9 @@ public class TasksPanel extends JPanel {
 
         fillTasksCombo();
 
-        JButton buttonAdd = new JButton("+");
+        JButton buttonAdd = new JButton("Activate");
         buttonAdd.addActionListener((actionEvent) -> {
-            AddTaskDialog addTaskDialog = new AddTaskDialog();
-            addTaskDialog.setVisible(true);
-
-            fillTasksCombo();
+            System.out.println("activate.");
         });
 
         c.gridx++;
