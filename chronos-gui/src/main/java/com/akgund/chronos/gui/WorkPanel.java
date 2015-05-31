@@ -32,10 +32,14 @@ public class WorkPanel extends JPanel {
         for (int i = 0; i < works.size(); i++) {
             DateTime start = works.get(i).getStart();
             DateTime end = works.get(i).getEnd();
-            Period duration = DateTimeHelper.getDiff(start, end);
+
+            Period duration = Period.millis(-1);
+            if (end != null) {
+                duration = DateTimeHelper.getDiff(start, end);
+            }
 
             data[i][0] = DateTimeHelper.printDate(start);
-            data[i][1] = DateTimeHelper.printDate(end);
+            data[i][1] = end != null ? DateTimeHelper.printDate(end) : "current";
             data[i][2] = DateTimeHelper.printDuration(duration);
         }
 
