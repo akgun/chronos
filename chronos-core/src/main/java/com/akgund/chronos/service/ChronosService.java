@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ChronosService implements IChronosService {
 
@@ -20,6 +21,39 @@ public class ChronosService implements IChronosService {
     public List<Task> listTasks() throws ChronosCoreException {
         ChronosTasks chronosTasks = chronosTasksDAL.get();
         return new ArrayList<>(chronosTasks.getTasks().values());
+    }
+
+    @Override
+    public List<Work> filterWorks(Long taskId, Integer year, Integer month, Integer day)
+            throws ChronosCoreException, ChronosServiceException {
+        Task task = getTask(taskId);
+        if (task == null) {
+            throw new ChronosServiceException("Task not found. Task id: " + taskId);
+        }
+
+        List<Work> works = task.getWorkList().stream().filter(work1 -> {
+            if (year == null) {
+                return true;
+            }
+
+            return work1.getStart().getYear() == year;
+        }).filter(work2 -> {
+                    if (month == null) {
+                        return true;
+                    }
+
+                    return work2.getStart().getMonthOfYear() == month;
+                }
+        ).filter(work3 -> {
+            if (day == null) {
+                return true;
+            }
+
+            return work3.getStart().getDayOfMonth() == day;
+        }).collect(Collectors.toList());
+
+
+        return works;
     }
 
     @Override

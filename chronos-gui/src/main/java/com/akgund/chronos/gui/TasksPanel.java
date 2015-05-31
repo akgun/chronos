@@ -98,7 +98,7 @@ public class TasksPanel extends JPanel implements IMessageClient {
             return;
         }
 
-        workPanel.add(new WorkPanel(selectedTask.getWorkList()), BorderLayout.CENTER);
+        workPanel.add(new WorkPanel(selectedTask.getId()), BorderLayout.CENTER);
         MessageBus.getInstance().sendMessage(ChronosGUI.class, MessageType.PACK);
     }
 
