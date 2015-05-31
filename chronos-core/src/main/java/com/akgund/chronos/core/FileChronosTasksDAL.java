@@ -2,8 +2,8 @@ package com.akgund.chronos.core;
 
 
 import com.akgund.chronos.model.ChronosTasks;
+import com.google.inject.Inject;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

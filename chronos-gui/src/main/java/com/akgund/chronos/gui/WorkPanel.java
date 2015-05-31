@@ -1,10 +1,10 @@
 package com.akgund.chronos.gui;
 
+import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.ChronosCoreException;
 import com.akgund.chronos.model.Work;
 import com.akgund.chronos.service.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
-import com.akgund.chronos.util.CDIFactory;
 import com.akgund.chronos.util.DateTimeHelper;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class WorkPanel extends JPanel {
-    private IChronosService chronosService = CDIFactory.getInstance().inject(IChronosService.class);
+    private IChronosService chronosService = ChronosServiceFactory.create();
     private JComboBox<Integer> comboDaySelection = new JComboBox<>();
     private static final String[] columns = new String[]{"Start", "End", "Duration"};
     private JTable tableWorkList = new JTable();

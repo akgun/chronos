@@ -5,9 +5,9 @@ import com.akgund.chronos.core.IChronosTasksDAL;
 import com.akgund.chronos.model.ChronosTasks;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
+import com.google.inject.Inject;
 import org.joda.time.DateTime;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

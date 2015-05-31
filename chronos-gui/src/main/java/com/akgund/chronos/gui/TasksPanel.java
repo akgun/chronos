@@ -1,5 +1,6 @@
 package com.akgund.chronos.gui;
 
+import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.ChronosCoreException;
 import com.akgund.chronos.gui.bus.IMessageClient;
 import com.akgund.chronos.gui.bus.MessageBus;
@@ -7,14 +8,13 @@ import com.akgund.chronos.gui.bus.MessageType;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.service.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
-import com.akgund.chronos.util.CDIFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
 public class TasksPanel extends JPanel implements IMessageClient {
-    private IChronosService chronosService = CDIFactory.getInstance().inject(IChronosService.class);
+    private IChronosService chronosService = ChronosServiceFactory.create();
     private JComboBox<TaskComboBoxItem> comboBoxTasks = new JComboBox<>();
     private JButton buttonActivate = new JButton("Activate");
     private JPanel workPanel = new JPanel();

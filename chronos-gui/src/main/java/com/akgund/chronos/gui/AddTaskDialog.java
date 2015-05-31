@@ -1,15 +1,15 @@
 package com.akgund.chronos.gui;
 
+import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.ChronosCoreException;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.service.IChronosService;
-import com.akgund.chronos.util.CDIFactory;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class AddTaskDialog extends JDialog {
-    private IChronosService chronosService = CDIFactory.getInstance().inject(IChronosService.class);
+    private IChronosService chronosService =  ChronosServiceFactory.create();
     private JTextField textFieldName = new JTextField(20);
 
     public AddTaskDialog() {

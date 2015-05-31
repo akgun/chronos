@@ -6,8 +6,7 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 public class GsonChronosSerializer implements IChronosSerializer {
-    @Inject
-    private Gson gson;
+    private Gson gson = GsonProducer.newGson();
 
     public String serialize(ChronosTasks chronosTasks) {
         return gson.toJson(chronosTasks);
