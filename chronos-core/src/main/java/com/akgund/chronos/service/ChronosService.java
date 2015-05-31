@@ -69,6 +69,26 @@ public class ChronosService implements IChronosService {
         chronosTasksDAL.save(chronosTasks);
     }
 
+    @Override
+    public void saveWork(Work work) throws ChronosServiceException, ChronosCoreException {
+        if (work == null) {
+            throw new ChronosServiceException("Work is null.");
+        }
+
+        if (work.getTaskId() == null) {
+            throw new ChronosServiceException("Task id of work is null.");
+        }
+
+        Task task = getTask(work.getTaskId());
+
+        Work existingWork = task.getWorkList().stream().filter(w -> w.getId() == work.getId()).findFirst().get();
+        existingWork.setStart(work.getStart());
+        existingWork.setEnd(work.getEnd());
+        existingWork.setComment(work.getComment());
+
+        saveTask(task);
+    }
+
     private long generateId() {
         return DateTime.now().getMillis();
     }
@@ -92,6 +112,8 @@ public class ChronosService implements IChronosService {
 
         task.setActive(true);
         Work newWork = new Work();
+        newWork.setId(generateId());
+        newWork.setTaskId(task.getId());
         newWork.setStart(DateTime.now());
         task.getWorkList().add(newWork);
 
