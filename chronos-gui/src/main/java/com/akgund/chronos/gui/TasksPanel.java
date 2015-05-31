@@ -16,35 +16,55 @@ import java.util.List;
 public class TasksPanel extends JPanel implements IMessageClient {
     private IChronosService chronosService = CDIFactory.getInstance().inject(IChronosService.class);
     private JComboBox<TaskComboBoxItem> comboBoxTasks = new JComboBox<>();
+    private JButton buttonActivate = new JButton("Activate");
     private JPanel workPanel = new JPanel();
 
     public TasksPanel() {
         MessageBus.getInstance().register(this);
-
         setLayout(new GridBagLayout());
+        workPanel.setLayout(new BorderLayout());
 
+        createLayout();
+
+        fillTasksCombo();
+
+        initHandlers();
+    }
+
+    private void createLayout() {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.anchor = GridBagConstraints.LINE_START;
         c.insets = new Insets(5, 5, 5, 5);
 
-        c.gridx = 0;
-        c.gridy = 0;
+        setConstraint(c, 0, 0, 3, 0);
+        add(new ActiveTaskPanel(), c);
 
-        JLabel labelTasks = new JLabel("Tasks:");
-        add(labelTasks, c);
-
-        c.gridx++;
-        c.weightx = 1;
+        setConstraint(c, 0, 1, 1, 0);
+        add(new JLabel("Tasks:"), c);
+        setConstraint(c, 1, 1, 1, 1);
         add(comboBoxTasks, c);
+        setConstraint(c, 2, 1, 1, 0);
+        add(buttonActivate, c);
 
+        setConstraint(c, 0, 2, 3, 1);
+        c.weighty = 1;
+        add(workPanel, c);
+    }
+
+    private void setConstraint(GridBagConstraints c, int x, int y, int width, int weight) {
+        c.gridx = x;
+        c.gridy = y;
+        c.gridwidth = width;
+        c.gridwidth = width;
+        c.weightx = weight;
+    }
+
+    private void initHandlers() {
         comboBoxTasks.addActionListener((actionEvent) -> {
             updateWorkPanel();
         });
 
-        fillTasksCombo();
-
-        JButton buttonActivate = new JButton("Activate");
         buttonActivate.addActionListener((actionEvent) -> {
             Task selectedTask = getSelectedTask();
             if (selectedTask == null) {
@@ -62,23 +82,6 @@ public class TasksPanel extends JPanel implements IMessageClient {
             updateWorkPanel();
             MessageBus.getInstance().sendMessage(ActiveTaskPanel.class, MessageType.RELOAD_DATA);
         });
-
-        c.gridx++;
-        c.weightx = 0;
-        add(buttonActivate, c);
-
-        c.gridx = 0;
-        c.gridy++;
-        add(new ActiveTaskPanel(), c);
-
-        c.gridx = 0;
-        c.gridy++;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.gridwidth = 3;
-
-        workPanel.setLayout(new BorderLayout());
-        add(workPanel, c);
     }
 
     private void updateWorkPanel() {
@@ -93,7 +96,7 @@ public class TasksPanel extends JPanel implements IMessageClient {
         MessageBus.getInstance().sendMessage(ChronosGUI.class, MessageType.PACK);
     }
 
-    public Task getSelectedTask() {
+    private Task getSelectedTask() {
         Object selection = comboBoxTasks.getSelectedItem();
         if (selection == null) {
             return null;

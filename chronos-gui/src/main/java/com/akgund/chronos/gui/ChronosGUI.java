@@ -13,7 +13,6 @@ public class ChronosGUI extends JFrame implements IMessageClient {
         MessageBus.getInstance().register(this);
         setTitle("Chronos Time Tracker");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
         setContentPane(new MainPanel());
         setJMenuBar(createMenu());
         pack();
