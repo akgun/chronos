@@ -41,6 +41,14 @@ public class ChronosService implements IChronosService {
 
     @Override
     public void activateTask(Long taskId) throws ChronosCoreException, ChronosServiceException {
+        Task activeTask = findActiveTask();
+        if (activeTask != null) {
+            if (taskId == activeTask.getId()) {
+                /* Active already. */
+                return;
+            }
+        }
+
         deactivateActiveTask();
 
         final Task task = getTask(taskId);
