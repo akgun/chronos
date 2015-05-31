@@ -7,6 +7,7 @@ public class Work {
     private DateTime start;
     private DateTime end;
     private String comment;
+    private Long taskId;
 
     public Long getId() {
         return id;
@@ -38,5 +39,13 @@ public class Work {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
 }
