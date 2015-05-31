@@ -25,6 +25,6 @@ public class DateTimeHelperTest {
         DateTime dateTime1 = formatter.parseDateTime("14:02:15");
         DateTime dateTime2 = formatter.parseDateTime("18:03:22");
         String output = DateTimeHelper.printDuration(new Period(dateTime1, dateTime2));
-        assertEquals("4 hours 1 minutes", output);
+        assertEquals("4 hours 1 minutes 7 seconds", output);
     }
 }

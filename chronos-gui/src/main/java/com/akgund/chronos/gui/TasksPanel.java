@@ -60,6 +60,7 @@ public class TasksPanel extends JPanel implements IMessageClient {
             }
 
             updateWorkPanel();
+            MessageBus.getInstance().sendMessage(ActiveTaskPanel.class, MessageType.RELOAD_DATA);
         });
 
         c.gridx++;
@@ -67,7 +68,11 @@ public class TasksPanel extends JPanel implements IMessageClient {
         add(buttonActivate, c);
 
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy++;
+        add(new ActiveTaskPanel(), c);
+
+        c.gridx = 0;
+        c.gridy++;
         c.weightx = 1;
         c.weighty = 1;
         c.gridwidth = 3;

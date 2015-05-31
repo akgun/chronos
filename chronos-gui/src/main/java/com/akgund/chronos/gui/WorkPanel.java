@@ -16,7 +16,6 @@ public class WorkPanel extends JPanel {
         String[] columns = new String[]{"Start", "End", "Duration"};
 
         JTable workTable = new JTable(createTableData(workList), columns);
-        workTable.setPreferredScrollableViewportSize(new Dimension(500, 70));
         workTable.setFillsViewportHeight(true);
 
         JScrollPane scrollPane = new JScrollPane(workTable);

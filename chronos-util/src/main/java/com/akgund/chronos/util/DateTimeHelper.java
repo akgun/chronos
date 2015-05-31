@@ -14,6 +14,7 @@ public class DateTimeHelper {
                 .appendDays().appendSuffix(" days ")
                 .appendHours().appendSuffix(" hours ")
                 .appendMinutes().appendSuffix(" minutes ")
+                .appendSeconds().appendSuffix(" seconds ")
                 .toFormatter();
 
         return formatter.print(period).trim();
