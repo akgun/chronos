@@ -62,6 +62,12 @@ public class TasksPanel extends JPanel implements IMessageClient {
 
     private void initHandlers() {
         comboBoxTasks.addActionListener((actionEvent) -> {
+            Task selectedTask = getSelectedTask();
+            if (selectedTask == null) {
+                return;
+            }
+
+            buttonActivate.setText(selectedTask.isActive() ? "Deactivate" : "Activate");
             updateWorkPanel();
         });
 
@@ -72,7 +78,11 @@ public class TasksPanel extends JPanel implements IMessageClient {
             }
 
             try {
-                chronosService.activateTask(selectedTask.getId());
+                if (selectedTask.isActive()) {
+                    chronosService.deactivateActiveTask();
+                } else {
+                    chronosService.activateTask(selectedTask.getId());
+                }
             } catch (ChronosCoreException e) {
                 e.printStackTrace();
             } catch (ChronosServiceException e) {

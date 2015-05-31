@@ -18,7 +18,7 @@ public class Task {
         for (Work work : getWorkList()) {
             DateTime start = work.getStart();
             DateTime end = work.getEnd();
-            if (end == null) {
+            if (end == null && isActive()) {
                 end = DateTime.now();
             }
 
