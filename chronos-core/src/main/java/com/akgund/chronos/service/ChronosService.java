@@ -41,12 +41,12 @@ public class ChronosService implements IChronosService {
 
     @Override
     public void activateTask(Long taskId) throws ChronosCoreException, ChronosServiceException {
+        deactivateActiveTask();
+
         final Task task = getTask(taskId);
         if (task == null) {
             throw new ChronosServiceException("Could not find task. Task id: " + taskId);
         }
-
-        deactivateActiveTask();
 
         task.setActive(true);
         Work newWork = new Work();
