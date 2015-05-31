@@ -15,7 +15,6 @@ public class AddTaskDialog extends JDialog {
     public AddTaskDialog() {
         setModal(true);
         setTitle("Add new task");
-        setLocationRelativeTo(null);
 
         JPanel contentPane = new JPanel();
         contentPane.setLayout(new GridBagLayout());

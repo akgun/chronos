@@ -56,7 +56,7 @@ public class WorkPanel extends JPanel {
 
     private List<Work> getWorks(Long taskId, int day) {
         try {
-            return chronosService.filterWorks(taskId, null, null, day);
+            return chronosService.filterWorks(taskId, null, null, day > 0 ? day : null);
         } catch (ChronosCoreException e) {
             e.printStackTrace();
         } catch (ChronosServiceException e) {
