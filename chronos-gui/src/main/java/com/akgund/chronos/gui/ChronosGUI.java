@@ -27,7 +27,7 @@ public class ChronosGUI extends JFrame implements IMessageClient {
             AddTaskDialog addTaskDialog = new AddTaskDialog();
             addTaskDialog.setVisible(true);
 
-            MessageBus.getInstance().sendMessage(TasksPanel.class, MessageType.RELOAD_DATA);
+            MessageBus.getInstance().sendMessage(TaskSelectionPanel.class, MessageType.RELOAD_DATA);
             pack();
         });
         menuSettings.add(menuItemAddTask);
