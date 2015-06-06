@@ -5,6 +5,7 @@ import com.akgund.chronos.core.IChronosTasksDAL;
 import com.akgund.chronos.model.ChronosTasks;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
+import com.akgund.chronos.model.WorkComparator;
 import com.google.inject.Inject;
 import org.joda.time.DateTime;
 

@@ -1,6 +1,4 @@
-package com.akgund.chronos.service;
-
-import com.akgund.chronos.model.Work;
+package com.akgund.chronos.model;
 
 import java.util.Comparator;
 
