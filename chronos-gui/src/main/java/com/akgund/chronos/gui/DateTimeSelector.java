@@ -51,6 +51,11 @@ public class DateTimeSelector extends JPanel {
                 comboBoxHour.addItem(new DateTimeAbstractComboBoxItem(value)));
         IntStream.range(0, 60).forEach(value ->
                 comboBoxMinute.addItem(new DateTimeAbstractComboBoxItem(value)));
+
+        comboBoxMonth.setSelectedIndex(getDateTime().getMonthOfYear() - 1);
+        comboBoxDay.setSelectedIndex(getDateTime().getDayOfMonth() - 1);
+        comboBoxHour.setSelectedIndex(getDateTime().getHourOfDay());
+        comboBoxMinute.setSelectedIndex(getDateTime().getMinuteOfHour());
     }
 
     public DateTime getDateTime() {
