@@ -1,8 +1,11 @@
 package com.akgund.chronos.test;
 
 import com.akgund.chronos.core.ChronosCoreException;
+import com.akgund.chronos.model.FilterWorkRequest;
+import com.akgund.chronos.model.FilterWorkResponse;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
+import com.akgund.chronos.service.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
 import org.joda.time.Duration;
 import org.joda.time.format.DateTimeFormat;
@@ -15,7 +18,7 @@ public class TaskDurationTest extends BaseTest {
     private IChronosService chronosService = MockFactory.createChronosService();
 
     @Test
-    public void testTotalWorkMin1() throws ChronosCoreException {
+    public void testTotalWorkMin1() throws ChronosCoreException, ChronosServiceException {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("MM-dd HH:mm");
 
         Task task = new Task();
@@ -26,12 +29,14 @@ public class TaskDurationTest extends BaseTest {
 
         chronosService.saveTask(task);
 
-        Duration totalWork = chronosService.getTotalWork(task.getId(), work -> true);
-        assertEquals(2700000L, totalWork.getMillis());
+        FilterWorkRequest filterWorkRequest = new FilterWorkRequest();
+        FilterWorkResponse filterWorkResponse = chronosService.filterWorks(task.getId(), filterWorkRequest);
+
+        assertEquals(2700000L, filterWorkResponse.getTotalDuration().getMillis());
     }
 
     @Test
-    public void testTotalWorkMin2() throws ChronosCoreException {
+    public void testTotalWorkMin2() throws ChronosCoreException, ChronosServiceException {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("MM-dd HH:mm");
 
         Task task = new Task();
@@ -47,7 +52,9 @@ public class TaskDurationTest extends BaseTest {
 
         chronosService.saveTask(task);
 
-        Duration totalWork = chronosService.getTotalWork(task.getId(), work -> true);
-        assertEquals(7200000L, totalWork.getMillis());
+        FilterWorkRequest filterWorkRequest = new FilterWorkRequest();
+        FilterWorkResponse filterWorkResponse = chronosService.filterWorks(task.getId(), filterWorkRequest);
+
+        assertEquals(7200000L, filterWorkResponse.getTotalDuration().getMillis());
     }
 }

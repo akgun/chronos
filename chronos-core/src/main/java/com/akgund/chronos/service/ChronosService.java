@@ -2,10 +2,7 @@ package com.akgund.chronos.service;
 
 import com.akgund.chronos.core.ChronosCoreException;
 import com.akgund.chronos.core.IChronosTasksDAL;
-import com.akgund.chronos.model.ChronosTasks;
-import com.akgund.chronos.model.Task;
-import com.akgund.chronos.model.Work;
-import com.akgund.chronos.model.WorkComparator;
+import com.akgund.chronos.model.*;
 import com.google.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -13,7 +10,6 @@ import org.joda.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ChronosService implements IChronosService {
@@ -28,36 +24,51 @@ public class ChronosService implements IChronosService {
     }
 
     @Override
-    public List<Work> filterWorks(Long taskId, Integer year, Integer month, Integer day)
+    public FilterWorkResponse filterWorks(Long taskId, FilterWorkRequest filterWorkRequest)
             throws ChronosCoreException, ChronosServiceException {
         Task task = getTask(taskId);
         if (task == null) {
             throw new ChronosServiceException("Task not found. Task id: " + taskId);
         }
 
-        List<Work> works = task.getWorkList().stream().filter(work1 -> {
-            if (year == null) {
+        List<Work> works = task.getWorkList().stream().filter(work -> {
+            if (filterWorkRequest.getYear() == null) {
                 return true;
             }
 
-            return work1.getStart().getYear() == year;
-        }).filter(work2 -> {
-                    if (month == null) {
+            return work.getStart().getYear() == filterWorkRequest.getYear();
+        }).filter(work -> {
+                    if (filterWorkRequest.getMonth() == null) {
                         return true;
                     }
 
-                    return work2.getStart().getMonthOfYear() == month;
+                    return work.getStart().getMonthOfYear() == filterWorkRequest.getMonth();
                 }
-        ).filter(work3 -> {
-            if (day == null) {
+        ).filter(work -> {
+            if (filterWorkRequest.getDay() == null) {
                 return true;
             }
 
-            return work3.getStart().getDayOfMonth() == day;
+            return work.getStart().getDayOfMonth() == filterWorkRequest.getDay();
         }).collect(Collectors.toList());
 
+        Duration total = Duration.millis(0);
 
-        return works;
+        for (Work work : works) {
+            DateTime start = work.getStart();
+            DateTime end = work.getEnd();
+            if (end == null && task.isActive()) {
+                end = DateTime.now();
+            }
+
+            total = total.plus(new Duration(start, end));
+        }
+
+        FilterWorkResponse filterWorkResult = new FilterWorkResponse();
+        filterWorkResult.setWorkList(works);
+        filterWorkResult.setTotalDuration(total);
+
+        return filterWorkResult;
     }
 
     @Override
@@ -165,25 +176,5 @@ public class ChronosService implements IChronosService {
         }
 
         return null;
-    }
-
-    @Override
-    public Duration getTotalWork(Long taskId, Predicate<Work> predicate) throws ChronosCoreException {
-        Task task = getTask(taskId);
-        Duration total = Duration.millis(0);
-
-        final List<Work> filteredWorks = task.getWorkList().stream().filter(predicate).collect(Collectors.toList());
-
-        for (Work work : filteredWorks) {
-            DateTime start = work.getStart();
-            DateTime end = work.getEnd();
-            if (end == null && task.isActive()) {
-                end = DateTime.now();
-            }
-
-            total = total.plus(new Duration(start, end));
-        }
-
-        return total;
     }
 }

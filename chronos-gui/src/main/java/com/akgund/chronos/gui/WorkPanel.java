@@ -2,12 +2,13 @@ package com.akgund.chronos.gui;
 
 import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.ChronosCoreException;
+import com.akgund.chronos.model.FilterWorkRequest;
+import com.akgund.chronos.model.FilterWorkResponse;
 import com.akgund.chronos.model.Work;
 import com.akgund.chronos.service.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.DateTimeHelper;
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.joda.time.Period;
 
 import javax.swing.*;
@@ -15,12 +16,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
 public class WorkPanel extends JPanel implements ActionListener {
-    private static final int ALL_SELECTION = -1;
     private IChronosService chronosService = ChronosServiceFactory.create();
     private JComboBox<WorkDaySelectionItem> comboMonthSelection = new JComboBox<>();
     private JComboBox<WorkDaySelectionItem> comboDaySelection = new JComboBox<>();
@@ -53,32 +52,19 @@ public class WorkPanel extends JPanel implements ActionListener {
         add(labelDailyTask, BorderLayout.SOUTH);
     }
 
-    private List<Work> getWorks(Long taskId, int selectedMonth, int day) {
-        try {
-            return chronosService.filterWorks(taskId, DateTime.now().getYear(),
-                    selectedMonth > ALL_SELECTION ? selectedMonth : null, day > ALL_SELECTION ? day : null);
-        } catch (ChronosCoreException e) {
-            e.printStackTrace();
-        } catch (ChronosServiceException e) {
-            e.printStackTrace();
-        }
-
-        return new ArrayList<>();
-    }
-
     private JPanel createDaySelectionPanel() {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
 
         jPanel.add(new JLabel("Month: "));
-        comboMonthSelection.addItem(new WorkDaySelectionItem(ALL_SELECTION));
+        comboMonthSelection.addItem(new WorkDaySelectionItem(null));
         IntStream.range(1, 13).forEach(value ->
                 comboMonthSelection.addItem(new WorkDaySelectionItem(value)));
         comboMonthSelection.setSelectedIndex(DateTime.now().getMonthOfYear());
         jPanel.add(comboMonthSelection);
 
         jPanel.add(new JLabel("Day: "));
-        comboDaySelection.addItem(new WorkDaySelectionItem(ALL_SELECTION));
+        comboDaySelection.addItem(new WorkDaySelectionItem(null));
         IntStream.range(1, 32).forEach(value ->
                 comboDaySelection.addItem(new WorkDaySelectionItem(value)));
         comboDaySelection.setSelectedIndex(DateTime.now().getDayOfMonth());
@@ -113,38 +99,39 @@ public class WorkPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        final int selectedMonth = getSelectedMonth();
-        final int selectedDay = getSelectedDay();
+        final Integer selectedMonth = getSelectedMonth();
+        final Integer selectedDay = getSelectedDay();
 
-        final List<Work> works = getWorks(taskId, selectedMonth, selectedDay);
+        FilterWorkRequest filterWorkRequest = new FilterWorkRequest();
+        filterWorkRequest.setMonth(selectedMonth);
+        filterWorkRequest.setDay(selectedDay);
 
-        tableWorkList.setModel(new DefaultTableModel(createTableData(works), columns));
         try {
-            Duration dailyTotalWork = chronosService.getTotalWork(taskId,
-                    work -> work.getStart().getYear() == DateTime.now().getYear()
-                            && selectedMonth > ALL_SELECTION ? work.getStart().getMonthOfYear() == selectedMonth : true
-                            && selectedDay > ALL_SELECTION ? work.getStart().getDayOfMonth() == selectedDay : true);
+            FilterWorkResponse filterWorkResponse = chronosService.filterWorks(taskId, filterWorkRequest);
+            tableWorkList.setModel(new DefaultTableModel(createTableData(filterWorkResponse.getWorkList()), columns));
             String dailyTask = String.format("Total: %s",
-                    DateTimeHelper.printDuration(dailyTotalWork.toPeriod()));
+                    DateTimeHelper.printDuration(filterWorkResponse.getTotalDuration().toPeriod()));
             labelDailyTask.setText(dailyTask);
         } catch (ChronosCoreException e) {
+            e.printStackTrace();
+        } catch (ChronosServiceException e) {
             e.printStackTrace();
         }
     }
 
-    private int getSelectedMonth() {
+    private Integer getSelectedMonth() {
         Object selectedItem = comboMonthSelection.getSelectedItem();
         if (selectedItem == null) {
-            return ALL_SELECTION;
+            return null;
         }
 
         return ((WorkDaySelectionItem) selectedItem).getValue();
     }
 
-    private int getSelectedDay() {
+    private Integer getSelectedDay() {
         Object selectedItem = comboDaySelection.getSelectedItem();
         if (selectedItem == null) {
-            return ALL_SELECTION;
+            return null;
         }
 
         return ((WorkDaySelectionItem) selectedItem).getValue();
@@ -158,7 +145,7 @@ public class WorkPanel extends JPanel implements ActionListener {
 
         @Override
         public String getLabel() {
-            if (getValue() == ALL_SELECTION) {
+            if (getValue() == null) {
                 return "All";
             }
 
