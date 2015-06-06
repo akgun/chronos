@@ -13,13 +13,17 @@ import org.joda.time.Period;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class WorkPanel extends JPanel {
+public class WorkPanel extends JPanel implements ActionListener {
+    private static final int ALL_SELECTION = -1;
     private IChronosService chronosService = ChronosServiceFactory.create();
-    private JComboBox<Integer> comboDaySelection = new JComboBox<>();
+    private JComboBox<WorkDaySelectionItem> comboMonthSelection = new JComboBox<>();
+    private JComboBox<WorkDaySelectionItem> comboDaySelection = new JComboBox<>();
     private static final String[] columns = new String[]{"Start", "End", "Duration"};
     private JTable tableWorkList = new JTable();
     private Long taskId;
@@ -34,27 +38,10 @@ public class WorkPanel extends JPanel {
     }
 
     private void initHandlers() {
-        comboDaySelection.addActionListener(e1 -> {
-            Object selectedItem = comboDaySelection.getSelectedItem();
-            if (selectedItem == null) {
-                return;
-            }
-
-            int selectedDay = (int) selectedItem;
-            List<Work> works = getWorks(taskId, selectedDay);
-
-            tableWorkList.setModel(new DefaultTableModel(createTableData(works), columns));
-            try {
-                Duration dailyTotalWork = chronosService.getTask(taskId)
-                        .getTotalWork(work -> work.getStart().getDayOfMonth() == DateTime.now().getDayOfMonth());
-                String dailyTask = String.format("Today total: %s",
-                        DateTimeHelper.printDuration(dailyTotalWork.toPeriod()));
-                labelDailyTask.setText(dailyTask);
-            } catch (ChronosCoreException e) {
-                e.printStackTrace();
-            }
-        });
+        comboDaySelection.addActionListener(this);
+        comboMonthSelection.addActionListener(this);
     }
+
 
     private void createLayout() {
         add(createDaySelectionPanel(), BorderLayout.NORTH);
@@ -66,10 +53,10 @@ public class WorkPanel extends JPanel {
         add(labelDailyTask, BorderLayout.SOUTH);
     }
 
-    private List<Work> getWorks(Long taskId, int day) {
+    private List<Work> getWorks(Long taskId, int selectedMonth, int day) {
         try {
             return chronosService.filterWorks(taskId, DateTime.now().getYear(),
-                    DateTime.now().getMonthOfYear(), day > 0 ? day : null);
+                    selectedMonth > ALL_SELECTION ? selectedMonth : null, day > ALL_SELECTION ? day : null);
         } catch (ChronosCoreException e) {
             e.printStackTrace();
         } catch (ChronosServiceException e) {
@@ -82,10 +69,19 @@ public class WorkPanel extends JPanel {
     private JPanel createDaySelectionPanel() {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
-        IntStream.range(0, 32).forEach(value -> comboDaySelection.addItem(value));
-        comboDaySelection.setSelectedItem(DateTime.now().getDayOfMonth());
+
+        jPanel.add(new JLabel("Month: "));
+        comboMonthSelection.addItem(new WorkDaySelectionItem(ALL_SELECTION));
+        IntStream.range(1, 13).forEach(value ->
+                comboMonthSelection.addItem(new WorkDaySelectionItem(value)));
+        comboMonthSelection.setSelectedIndex(DateTime.now().getMonthOfYear());
+        jPanel.add(comboMonthSelection);
 
         jPanel.add(new JLabel("Day: "));
+        comboDaySelection.addItem(new WorkDaySelectionItem(ALL_SELECTION));
+        IntStream.range(1, 32).forEach(value ->
+                comboDaySelection.addItem(new WorkDaySelectionItem(value)));
+        comboDaySelection.setSelectedIndex(DateTime.now().getDayOfMonth());
         jPanel.add(comboDaySelection);
 
         return jPanel;
@@ -113,5 +109,60 @@ public class WorkPanel extends JPanel {
         }
 
         return data;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent event) {
+        final int selectedMonth = getSelectedMonth();
+        final int selectedDay = getSelectedDay();
+
+        final List<Work> works = getWorks(taskId, selectedMonth, selectedDay);
+
+        tableWorkList.setModel(new DefaultTableModel(createTableData(works), columns));
+        try {
+            Duration dailyTotalWork = chronosService.getTotalWork(taskId,
+                    work -> work.getStart().getYear() == DateTime.now().getYear()
+                            && selectedMonth > ALL_SELECTION ? work.getStart().getMonthOfYear() == selectedMonth : true
+                            && selectedDay > ALL_SELECTION ? work.getStart().getDayOfMonth() == selectedDay : true);
+            String dailyTask = String.format("Total: %s",
+                    DateTimeHelper.printDuration(dailyTotalWork.toPeriod()));
+            labelDailyTask.setText(dailyTask);
+        } catch (ChronosCoreException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int getSelectedMonth() {
+        Object selectedItem = comboMonthSelection.getSelectedItem();
+        if (selectedItem == null) {
+            return ALL_SELECTION;
+        }
+
+        return ((WorkDaySelectionItem) selectedItem).getValue();
+    }
+
+    private int getSelectedDay() {
+        Object selectedItem = comboDaySelection.getSelectedItem();
+        if (selectedItem == null) {
+            return ALL_SELECTION;
+        }
+
+        return ((WorkDaySelectionItem) selectedItem).getValue();
+    }
+
+    class WorkDaySelectionItem extends AbstractComboBoxItem<Integer> {
+
+        public WorkDaySelectionItem(Integer value) {
+            super(value);
+        }
+
+        @Override
+        public String getLabel() {
+            if (getValue() == ALL_SELECTION) {
+                return "All";
+            }
+
+            return String.format("%02d", getValue());
+        }
     }
 }

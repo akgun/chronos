@@ -8,10 +8,12 @@ import com.akgund.chronos.model.Work;
 import com.akgund.chronos.model.WorkComparator;
 import com.google.inject.Inject;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ChronosService implements IChronosService {
@@ -163,5 +165,25 @@ public class ChronosService implements IChronosService {
         }
 
         return null;
+    }
+
+    @Override
+    public Duration getTotalWork(Long taskId, Predicate<Work> predicate) throws ChronosCoreException {
+        Task task = getTask(taskId);
+        Duration total = Duration.millis(0);
+
+        final List<Work> filteredWorks = task.getWorkList().stream().filter(predicate).collect(Collectors.toList());
+
+        for (Work work : filteredWorks) {
+            DateTime start = work.getStart();
+            DateTime end = work.getEnd();
+            if (end == null && task.isActive()) {
+                end = DateTime.now();
+            }
+
+            total = total.plus(new Duration(start, end));
+        }
+
+        return total;
     }
 }

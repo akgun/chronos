@@ -1,11 +1,12 @@
 package com.akgund.chronos.service;
 
 import com.akgund.chronos.core.ChronosCoreException;
-import com.akgund.chronos.model.ChronosTasks;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
+import org.joda.time.Duration;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface IChronosService {
 
@@ -25,4 +26,6 @@ public interface IChronosService {
     void activateTask(Long taskId) throws ChronosCoreException, ChronosServiceException;
 
     void deactivateActiveTask() throws ChronosCoreException;
+
+    Duration getTotalWork(Long taskId, Predicate<Work> predicate) throws ChronosCoreException;
 }

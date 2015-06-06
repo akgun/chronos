@@ -19,7 +19,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class TestChronosService {
+public class TestChronosService extends BaseTest {
     private IChronosService chronosService = MockFactory.createChronosService();
     private IChronosURI chronosURI = MockFactory.createChoronosURI();
     private String originalData;

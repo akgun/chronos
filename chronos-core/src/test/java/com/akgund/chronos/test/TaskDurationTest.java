@@ -1,17 +1,21 @@
 package com.akgund.chronos.test;
 
+import com.akgund.chronos.core.ChronosCoreException;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
+import com.akgund.chronos.service.IChronosService;
+import org.joda.time.Duration;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class TaskDurationTest {
+public class TaskDurationTest extends BaseTest {
+    private IChronosService chronosService = MockFactory.createChronosService();
 
     @Test
-    public void testTotalWorkMin1() {
+    public void testTotalWorkMin1() throws ChronosCoreException {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("MM-dd HH:mm");
 
         Task task = new Task();
@@ -20,11 +24,14 @@ public class TaskDurationTest {
         work1.setEnd(formatter.parseDateTime("05-12 09:45"));
         task.getWorkList().add(work1);
 
-        assertEquals(2700000L, task.getTotalWork().getMillis());
+        chronosService.saveTask(task);
+
+        Duration totalWork = chronosService.getTotalWork(task.getId(), work -> true);
+        assertEquals(2700000L, totalWork.getMillis());
     }
 
     @Test
-    public void testTotalWorkMin2() {
+    public void testTotalWorkMin2() throws ChronosCoreException {
         DateTimeFormatter formatter = DateTimeFormat.forPattern("MM-dd HH:mm");
 
         Task task = new Task();
@@ -38,6 +45,9 @@ public class TaskDurationTest {
         work2.setEnd(formatter.parseDateTime("05-12 11:45"));
         task.getWorkList().add(work2);
 
-        assertEquals(7200000L, task.getTotalWork().getMillis());
+        chronosService.saveTask(task);
+
+        Duration totalWork = chronosService.getTotalWork(task.getId(), work -> true);
+        assertEquals(7200000L, totalWork.getMillis());
     }
 }
