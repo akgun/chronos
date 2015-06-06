@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.util.stream.IntStream;
 
 public class DateTimeSelector extends JPanel {
-    private DateTime dateTime;
+    private DateTime initialTime;
     private JComboBox<DateTimeAbstractComboBoxItem> comboBoxMonth;
     private JComboBox<DateTimeAbstractComboBoxItem> comboBoxDay;
     private JComboBox<DateTimeAbstractComboBoxItem> comboBoxHour;
@@ -17,7 +17,7 @@ public class DateTimeSelector extends JPanel {
     }
 
     public DateTimeSelector(DateTime initial) {
-        this.dateTime = initial;
+        this.initialTime = initial;
 
         initComboBoxes();
 
@@ -52,14 +52,26 @@ public class DateTimeSelector extends JPanel {
         IntStream.range(0, 60).forEach(value ->
                 comboBoxMinute.addItem(new DateTimeAbstractComboBoxItem(value)));
 
-        comboBoxMonth.setSelectedIndex(getDateTime().getMonthOfYear() - 1);
-        comboBoxDay.setSelectedIndex(getDateTime().getDayOfMonth() - 1);
-        comboBoxHour.setSelectedIndex(getDateTime().getHourOfDay());
-        comboBoxMinute.setSelectedIndex(getDateTime().getMinuteOfHour());
+        comboBoxMonth.setSelectedIndex(initialTime.getMonthOfYear() - 1);
+        comboBoxDay.setSelectedIndex(initialTime.getDayOfMonth() - 1);
+        comboBoxHour.setSelectedIndex(initialTime.getHourOfDay());
+        comboBoxMinute.setSelectedIndex(initialTime.getMinuteOfHour());
     }
 
     public DateTime getDateTime() {
-        return dateTime;
+        DateTimeAbstractComboBoxItem selectedMonth = getSelection(comboBoxMonth);
+        DateTimeAbstractComboBoxItem selectedDay = getSelection(comboBoxDay);
+        DateTimeAbstractComboBoxItem selectedHour = getSelection(comboBoxHour);
+        DateTimeAbstractComboBoxItem selectedMinute = getSelection(comboBoxMinute);
+
+        return this.initialTime.withMonthOfYear(selectedMonth.getValue())
+                .withDayOfMonth(selectedDay.getValue())
+                .withHourOfDay(selectedHour.getValue())
+                .withMinuteOfHour(selectedMinute.getValue());
+    }
+
+    private <T> T getSelection(JComboBox<T> comboBox) {
+        return (T) comboBox.getSelectedItem();
     }
 }
 

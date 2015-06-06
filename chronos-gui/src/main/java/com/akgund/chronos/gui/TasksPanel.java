@@ -85,6 +85,8 @@ public class TasksPanel extends JPanel {
 
             AddWorkDialog addWorkDialog = new AddWorkDialog(selectedTask.getId());
             addWorkDialog.setVisible(true);
+            updateWorkPanel(taskSelectionPanel.getSelectedTask());
+            MessageBus.getInstance().sendMessage(ActiveTaskPanel.class, MessageType.RELOAD_DATA);
         });
     }
 

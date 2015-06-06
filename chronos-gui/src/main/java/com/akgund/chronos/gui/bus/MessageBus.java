@@ -22,7 +22,6 @@ public class MessageBus {
             throw new NoClientException(String.format("There is no client '%s'", target.getName()));
         }
 
-        /* bullshit. */
         clients.stream().filter((c) -> c.getClass() == target).forEach(c -> c.receiveMessage(message));
     }
 

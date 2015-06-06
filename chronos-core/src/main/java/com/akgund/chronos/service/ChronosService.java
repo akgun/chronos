@@ -81,10 +81,16 @@ public class ChronosService implements IChronosService {
 
         Task task = getTask(work.getTaskId());
 
-        Work existingWork = task.getWorkList().stream().filter(w -> w.getId().equals(work.getId())).findFirst().get();
-        existingWork.setStart(work.getStart());
-        existingWork.setEnd(work.getEnd());
-        existingWork.setComment(work.getComment());
+        if (work.getId() != null) {
+            Work existingWork = task.getWorkList().stream().filter(w -> w.getId().equals(work.getId())).findFirst().get();
+            existingWork.setStart(work.getStart());
+            existingWork.setEnd(work.getEnd());
+            existingWork.setComment(work.getComment());
+        } else {
+            /* new work. */
+            task.getWorkList().add(work);
+        }
+
 
         saveTask(task);
     }
