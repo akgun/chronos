@@ -7,7 +7,6 @@ import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
 import com.akgund.chronos.service.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
-import org.joda.time.Duration;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
@@ -56,5 +55,50 @@ public class TaskDurationTest extends BaseTest {
         FilterWorkResponse filterWorkResponse = chronosService.filterWorks(task.getId(), filterWorkRequest);
 
         assertEquals(7200000L, filterWorkResponse.getTotalDuration().getMillis());
+    }
+
+    @Test
+    public void testTotalWorkMin3() throws ChronosCoreException, ChronosServiceException {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("MM-dd HH:mm");
+
+        Task task = new Task();
+
+        Work work1 = new Work();
+        work1.setStart(formatter.parseDateTime("05-12 09:00"));
+        work1.setEnd(formatter.parseDateTime("05-12 09:45"));
+        task.getWorkList().add(work1);
+
+        Work work2 = new Work();
+        work2.setStart(formatter.parseDateTime("05-12 10:30"));
+        work2.setEnd(formatter.parseDateTime("05-12 11:45"));
+        task.getWorkList().add(work2);
+
+        Work work3 = new Work();
+        work3.setStart(formatter.parseDateTime("04-12 10:30"));
+        work3.setEnd(formatter.parseDateTime("04-12 11:45"));
+        task.getWorkList().add(work3);
+
+        Work work4 = new Work();
+        work4.setStart(formatter.parseDateTime("04-12 12:00"));
+        work4.setEnd(formatter.parseDateTime("04-12 12:55"));
+        task.getWorkList().add(work4);
+
+        Work work5 = new Work();
+        work5.setStart(formatter.parseDateTime("03-02 12:00"));
+        work5.setEnd(formatter.parseDateTime("03-02 12:55"));
+        task.getWorkList().add(work5);
+
+        chronosService.saveTask(task);
+
+        assertEquals(18300000L, chronosService.filterWorks(task.getId(), new FilterWorkRequest()).getTotalDuration().getMillis());
+
+        FilterWorkRequest filterWorkRequest12Apr = new FilterWorkRequest();
+        filterWorkRequest12Apr.setDay(12);
+        filterWorkRequest12Apr.setMonth(4);
+        assertEquals(7800000L, chronosService.filterWorks(task.getId(), filterWorkRequest12Apr).getTotalDuration().getMillis());
+
+        FilterWorkRequest filterWork12 = new FilterWorkRequest();
+        filterWork12.setDay(12);
+        assertEquals(15000000L, chronosService.filterWorks(task.getId(), filterWork12).getTotalDuration().getMillis());
     }
 }
