@@ -7,6 +7,7 @@ import com.akgund.chronos.service.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.DateTimeHelper;
 import org.joda.time.DateTime;
+import org.joda.time.Duration;
 import org.joda.time.Period;
 
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class WorkPanel extends JPanel {
     private static final String[] columns = new String[]{"Start", "End", "Duration"};
     private JTable tableWorkList = new JTable();
     private Long taskId;
+    private JLabel labelDailyTask = new JLabel();
 
     public WorkPanel(Long taskId) {
         setLayout(new BorderLayout());
@@ -42,6 +44,15 @@ public class WorkPanel extends JPanel {
             List<Work> works = getWorks(taskId, selectedDay);
 
             tableWorkList.setModel(new DefaultTableModel(createTableData(works), columns));
+            try {
+                Duration dailyTotalWork = chronosService.getTask(taskId)
+                        .getTotalWork(work -> work.getStart().getDayOfMonth() == DateTime.now().getDayOfMonth());
+                String dailyTask = String.format("Today total: %s",
+                        DateTimeHelper.printDuration(dailyTotalWork.toPeriod()));
+                labelDailyTask.setText(dailyTask);
+            } catch (ChronosCoreException e) {
+                e.printStackTrace();
+            }
         });
     }
 
@@ -52,11 +63,13 @@ public class WorkPanel extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(tableWorkList);
         add(scrollPane, BorderLayout.CENTER);
+        add(labelDailyTask, BorderLayout.SOUTH);
     }
 
     private List<Work> getWorks(Long taskId, int day) {
         try {
-            return chronosService.filterWorks(taskId, null, null, day > 0 ? day : null);
+            return chronosService.filterWorks(taskId, DateTime.now().getYear(),
+                    DateTime.now().getMonthOfYear(), day > 0 ? day : null);
         } catch (ChronosCoreException e) {
             e.printStackTrace();
         } catch (ChronosServiceException e) {

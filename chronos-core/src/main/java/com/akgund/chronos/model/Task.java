@@ -5,6 +5,8 @@ import org.joda.time.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Task {
     private Long id;
@@ -13,9 +15,15 @@ public class Task {
     private boolean active;
 
     public Duration getTotalWork() {
+        return getTotalWork(work -> true);
+    }
+
+    public Duration getTotalWork(Predicate<Work> predicate) {
         Duration total = Duration.millis(0);
 
-        for (Work work : getWorkList()) {
+        final List<Work> filteredWorks = getWorkList().stream().filter(predicate).collect(Collectors.toList());
+
+        for (Work work : filteredWorks) {
             DateTime start = work.getStart();
             DateTime end = work.getEnd();
             if (end == null && isActive()) {

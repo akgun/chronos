@@ -43,8 +43,7 @@ public class ActiveTaskPanel extends JPanel implements IMessageClient {
                 activateTaskLabel.setText("No active task.");
                 return;
             }
-            activateTaskLabel.setText(String.format("%s, total: %s", activeTask.getName(),
-                    DateTimeHelper.printDuration(activeTask.getTotalWork().toPeriod())));
+            activateTaskLabel.setText(String.format("%s", activeTask.getName()));
         } catch (ChronosCoreException e) {
             e.printStackTrace();
         }
