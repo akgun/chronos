@@ -102,6 +102,7 @@ public class TaskSelectionPanel extends JPanel implements IMessageClient {
     }
 }
 
+/* TODO: AbstractComboBoxItem kullan. */
 class TaskComboBoxItem {
     private String label;
     private Long taskId;
