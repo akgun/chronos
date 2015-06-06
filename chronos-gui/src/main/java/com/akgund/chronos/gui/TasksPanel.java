@@ -38,9 +38,10 @@ public class TasksPanel extends JPanel {
         add(new ActiveTaskPanel(), c);
 
         GUIUtil.setConstraint(c, 0, 1, 2, 1);
-        taskSelectionPanel = new TaskSelectionPanel(task ->
-                updateWorkPanel(task)
-        );
+        taskSelectionPanel = new TaskSelectionPanel(task -> {
+            updateWorkPanel(task);
+            updateActivateButtonText();
+        });
         add(taskSelectionPanel, c);
 
         GUIUtil.setConstraint(c, 2, 1, 1, 0);
@@ -51,6 +52,8 @@ public class TasksPanel extends JPanel {
         GUIUtil.setConstraint(c, 0, 2, 4, 1);
         c.weighty = 1;
         add(workPanel, c);
+
+        updateActivateButtonText();
     }
 
     private void initHandlers() {
@@ -102,6 +105,9 @@ public class TasksPanel extends JPanel {
     }
 
     private void updateActivateButtonText() {
+        if (taskSelectionPanel == null) {
+            return;
+        }
         Task selectedTask = taskSelectionPanel.getSelectedTask();
         if (selectedTask == null) {
             return;
