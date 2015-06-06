@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +65,8 @@ public class ChronosService implements IChronosService {
         if (task.getId() == null) {
             task.setId(generateId());
         }
+
+        Collections.sort(task.getWorkList(), new WorkComparator());
 
         chronosTasks.getTasks().put(task.getId(), task);
         chronosTasksDAL.save(chronosTasks);
