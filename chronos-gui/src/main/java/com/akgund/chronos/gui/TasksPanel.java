@@ -15,6 +15,7 @@ import java.awt.*;
 public class TasksPanel extends JPanel {
     private IChronosService chronosService = ChronosServiceFactory.create();
     private JButton buttonActivate = new JButton("Activate");
+    private JButton buttonAddWork = new JButton("Add Work");
     private JPanel workPanel = new JPanel();
     private TaskSelectionPanel taskSelectionPanel;
 
@@ -41,10 +42,13 @@ public class TasksPanel extends JPanel {
                 updateWorkPanel(task)
         );
         add(taskSelectionPanel, c);
+
         GUIUtil.setConstraint(c, 2, 1, 1, 0);
         add(buttonActivate, c);
+        GUIUtil.setConstraint(c, 3, 1, 1, 0);
+        add(buttonAddWork, c);
 
-        GUIUtil.setConstraint(c, 0, 2, 3, 1);
+        GUIUtil.setConstraint(c, 0, 2, 4, 1);
         c.weighty = 1;
         add(workPanel, c);
     }
@@ -71,6 +75,16 @@ public class TasksPanel extends JPanel {
 
             updateWorkPanel(taskSelectionPanel.getSelectedTask());
             MessageBus.getInstance().sendMessage(ActiveTaskPanel.class, MessageType.RELOAD_DATA);
+        });
+
+        buttonAddWork.addActionListener(e -> {
+            Task selectedTask = taskSelectionPanel.getSelectedTask();
+            if (selectedTask == null) {
+                return;
+            }
+
+            AddWorkDialog addWorkDialog = new AddWorkDialog(selectedTask.getId());
+            addWorkDialog.setVisible(true);
         });
     }
 
