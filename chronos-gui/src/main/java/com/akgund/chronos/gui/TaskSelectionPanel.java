@@ -84,7 +84,7 @@ public class TaskSelectionPanel extends JPanel implements IMessageClient {
         TaskComboBoxItem selectedItem = (TaskComboBoxItem) selection;
         Task task = null;
         try {
-            task = chronosService.getTask(selectedItem.getTaskId());
+            task = chronosService.getTask(selectedItem.getValue().getId());
 
             return task;
         } catch (ChronosCoreException e) {
@@ -102,34 +102,18 @@ public class TaskSelectionPanel extends JPanel implements IMessageClient {
     }
 }
 
-/* TODO: AbstractComboBoxItem kullan. */
-class TaskComboBoxItem {
-    private String label;
-    private Long taskId;
+class TaskComboBoxItem extends AbstractComboBoxItem<Task> {
 
     public TaskComboBoxItem(Task value) {
-        setLabel(value.getName());
-        taskId = value.getId();
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public Long getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
+        super(value);
     }
 
     @Override
-    public String toString() {
-        return getLabel();
+    public String getLabel() {
+        if (getValue() == null) {
+            return "error";
+        }
+
+        return getValue().getName();
     }
 }
