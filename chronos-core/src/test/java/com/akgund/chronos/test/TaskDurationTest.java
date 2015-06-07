@@ -101,4 +101,31 @@ public class TaskDurationTest extends BaseTest {
         filterWork12.setDay(12);
         assertEquals(15000000L, chronosService.filterWorks(task.getId(), filterWork12).getTotalDuration().getMillis());
     }
+
+    @Test
+    public void testTotalWorkDifferentTasks() throws ChronosCoreException, ChronosServiceException {
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("MM-dd HH:mm");
+
+        Task task1 = new Task();
+        Task task2 = new Task();
+
+        Work work1ForTask1 = new Work();
+        work1ForTask1.setStart(formatter.parseDateTime("04-30 09:00"));
+        work1ForTask1.setEnd(formatter.parseDateTime("04-30 09:30"));
+        task1.getWorkList().add(work1ForTask1);
+
+        Work work1ForTask2 = new Work();
+        work1ForTask2.setStart(formatter.parseDateTime("05-30 10:00"));
+        work1ForTask2.setEnd(formatter.parseDateTime("05-30 10:20"));
+        task2.getWorkList().add(work1ForTask2);
+
+        chronosService.saveTask(task1);
+        chronosService.saveTask(task2);
+
+        FilterWorkRequest filterWorkRequestDay30 = new FilterWorkRequest();
+        filterWorkRequestDay30.setDay(30);
+        FilterWorkResponse filterWorkResponse = chronosService.filterWorks(task1.getId(), filterWorkRequestDay30);
+
+        assertEquals(30 * 60 * 1000L, filterWorkResponse.getTotalDuration().getMillis());
+    }
 }
