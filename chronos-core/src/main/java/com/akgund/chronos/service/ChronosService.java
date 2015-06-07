@@ -118,6 +118,18 @@ public class ChronosService implements IChronosService {
         saveTask(task);
     }
 
+    @Override
+    public void deleteWork(Long taskId, Long workId) throws ChronosCoreException, ChronosServiceException {
+        Task task = getTask(taskId);
+
+        boolean deleted = task.getWorkList().removeIf(work -> work.getId().equals(workId));
+        if (!deleted) {
+            throw new ChronosServiceException(String.format("Delete failed. Task id: %s, work id: %s.", taskId, workId));
+        }
+
+        saveTask(task);
+    }
+
     private long generateId() {
         return DateTime.now().getMillis();
     }

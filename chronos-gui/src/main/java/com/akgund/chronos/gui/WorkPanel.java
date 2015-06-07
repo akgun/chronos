@@ -4,6 +4,7 @@ import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.ChronosCoreException;
 import com.akgund.chronos.model.FilterWorkRequest;
 import com.akgund.chronos.model.FilterWorkResponse;
+import com.akgund.chronos.model.Work;
 import com.akgund.chronos.service.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.DateTimeHelper;
@@ -60,10 +61,44 @@ public class WorkPanel extends JPanel implements ActionListener {
 
         tableWorkList.setFillsViewportHeight(true);
         tableWorkList.setModel(workTableModel);
+        tableWorkList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(tableWorkList);
         add(scrollPane, BorderLayout.CENTER);
-        add(labelDailyTask, BorderLayout.SOUTH);
+
+        JButton buttonDelete = new JButton("Delete Work");
+        buttonDelete.addActionListener(e -> {
+            int selectedRow = tableWorkList.getSelectedRow();
+            if (selectedRow < 0) {
+                return;
+            }
+
+            Work toDeleteWork = filterWorkResponse.getWorkList().get(selectedRow);
+            try {
+                try {
+                    chronosService.deleteWork(toDeleteWork.getTaskId(), toDeleteWork.getId());
+                } catch (ChronosServiceException e1) {
+                    e1.printStackTrace();
+                }
+
+                refreshData();
+            } catch (ChronosCoreException e1) {
+                e1.printStackTrace();
+            }
+        });
+
+        JPanel panelSouth = new JPanel();
+        panelSouth.setLayout(new BoxLayout(panelSouth, BoxLayout.Y_AXIS));
+        panelSouth.add(buttonDelete);
+        panelSouth.add(labelDailyTask);
+        add(panelSouth, BorderLayout.SOUTH);
+    }
+
+    private void refreshData() {
+        updateWorkFilter();
+        workTableModel.setWorkList(filterWorkResponse.getWorkList());
+        workTableModel.fireTableDataChanged();
+        updateTotalTaskLabel();
     }
 
     private JPanel createDaySelectionPanel() {
@@ -89,10 +124,7 @@ public class WorkPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        updateWorkFilter();
-        workTableModel.setWorkList(filterWorkResponse.getWorkList());
-        workTableModel.fireTableDataChanged();
-        updateTotalTaskLabel();
+        refreshData();
     }
 
     private void updateTotalTaskLabel() {

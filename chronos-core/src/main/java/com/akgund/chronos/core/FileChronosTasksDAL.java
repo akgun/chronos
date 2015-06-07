@@ -52,7 +52,7 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
                 Files.createFile(path);
             }
 
-            Files.write(path, data.getBytes(), StandardOpenOption.CREATE);
+            Files.write(path, data.getBytes(), StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE);
         } catch (IOException e) {
             throw new ChronosCoreException("Couldn't write to file.", e);
         }

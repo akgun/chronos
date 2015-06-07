@@ -23,6 +23,8 @@ public interface IChronosService {
 
     void saveWork(Work work) throws ChronosServiceException, ChronosCoreException;
 
+    void deleteWork(Long taskId, Long workId) throws ChronosCoreException, ChronosServiceException;
+
     void activateTask(Long taskId) throws ChronosCoreException, ChronosServiceException;
 
     void deactivateActiveTask() throws ChronosCoreException;
