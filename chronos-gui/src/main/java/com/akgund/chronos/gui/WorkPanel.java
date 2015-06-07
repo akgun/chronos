@@ -57,6 +57,7 @@ public class WorkPanel extends JPanel implements ActionListener {
     }
 
     private void createLayout() {
+        setBorder(BorderFactory.createTitledBorder(null, "Work Log"));
         add(createDaySelectionPanel(), BorderLayout.NORTH);
 
         tableWorkList.setFillsViewportHeight(true);

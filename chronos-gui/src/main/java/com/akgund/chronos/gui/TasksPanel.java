@@ -21,7 +21,6 @@ public class TasksPanel extends JPanel {
 
     public TasksPanel() {
         setLayout(new GridBagLayout());
-        workPanel.setLayout(new BorderLayout());
 
         createLayout();
 
@@ -51,7 +50,9 @@ public class TasksPanel extends JPanel {
 
         GUIUtil.setConstraint(c, 0, 2, 4, 1);
         c.weighty = 1;
-        add(workPanel, c);
+        c.fill = GridBagConstraints.BOTH;
+        JScrollPane workWrapper = new JScrollPane(workPanel);
+        add(workWrapper, c);
 
         updateActivateButtonText();
     }
@@ -100,7 +101,7 @@ public class TasksPanel extends JPanel {
             return;
         }
 
-        workPanel.add(new WorkPanel(task.getId()), BorderLayout.CENTER);
+        workPanel.add(new WorkPanel(task.getId()));
         MessageBus.getInstance().sendMessage(ChronosGUI.class, MessageType.PACK);
     }
 
