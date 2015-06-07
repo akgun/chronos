@@ -37,7 +37,7 @@ public class TestChronosService extends BaseTest {
         long taskId = 1433088710417L;
         Task task = chronosService.getTask(taskId);
         Work work = task.getWorkList().get(0);
-        DateTime end = new DateTime(2015, 10, 3, 12, 45, 3);
+        DateTime end = new DateTime(2015, 10, 3, 12, 45, 0);
         work.setEnd(end);
 
         chronosService.saveWork(work);

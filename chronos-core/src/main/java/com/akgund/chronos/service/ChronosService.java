@@ -84,6 +84,8 @@ public class ChronosService implements IChronosService {
             if (work.getId() == null) {
                 work.setId(generateId());
             }
+            work.setStart(normalizeDateTime(work.getStart()));
+            work.setEnd(normalizeDateTime(work.getEnd()));
         });
         Collections.sort(task.getWorkList(), new WorkComparator());
 
@@ -102,6 +104,9 @@ public class ChronosService implements IChronosService {
         }
 
         Task task = getTask(work.getTaskId());
+
+        work.setStart(normalizeDateTime(work.getStart()));
+        work.setEnd(normalizeDateTime(work.getEnd()));
 
         if (work.getId() != null) {
             Work existingWork = task.getWorkList().stream().filter(w -> w.getId().equals(work.getId())).findFirst().get();
@@ -155,7 +160,7 @@ public class ChronosService implements IChronosService {
         Work newWork = new Work();
         newWork.setId(generateId());
         newWork.setTaskId(task.getId());
-        newWork.setStart(DateTime.now());
+        newWork.setStart(normalizeDateTime(DateTime.now()));
         task.getWorkList().add(newWork);
 
         saveTask(task);
@@ -171,7 +176,7 @@ public class ChronosService implements IChronosService {
             List<Work> workList = activeTask.getWorkList();
             if (workList != null && !workList.isEmpty()) {
                 Work lastWork = workList.get(workList.size() - 1);
-                lastWork.setEnd(DateTime.now());
+                lastWork.setEnd(normalizeDateTime(DateTime.now()));
             }
             saveTask(activeTask);
         }
@@ -194,5 +199,13 @@ public class ChronosService implements IChronosService {
         }
 
         return null;
+    }
+
+    private DateTime normalizeDateTime(DateTime dateTime) {
+        if (dateTime == null) {
+            return null;
+        }
+
+        return dateTime.withSecondOfMinute(0).withMillisOfSecond(0);
     }
 }
