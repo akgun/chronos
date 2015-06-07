@@ -12,9 +12,10 @@ import java.util.List;
 public class WorkTableModel extends AbstractTableModel {
     private final String[] COLUMNS = new String[]{"Start", "End", "Duration"};
     private List<Work> workList = new ArrayList<>();
+    private IWorkUpdateEvent workUpdateEvent = work -> {
+    };
 
-    public WorkTableModel(List<Work> workList) {
-        setWorkList(workList);
+    public WorkTableModel() {
     }
 
     @Override
@@ -64,6 +65,8 @@ public class WorkTableModel extends AbstractTableModel {
         }
 
         fireTableDataChanged();
+
+        getWorkUpdateEvent().onPostUpdate(work);
     }
 
     @Override
@@ -86,5 +89,13 @@ public class WorkTableModel extends AbstractTableModel {
 
     public void setWorkList(List<Work> workList) {
         this.workList = workList;
+    }
+
+    public IWorkUpdateEvent getWorkUpdateEvent() {
+        return workUpdateEvent;
+    }
+
+    public void setWorkUpdateEvent(IWorkUpdateEvent workUpdateEvent) {
+        this.workUpdateEvent = workUpdateEvent;
     }
 }

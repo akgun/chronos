@@ -19,10 +19,11 @@ public class WorkPanel extends JPanel implements ActionListener {
     private IChronosService chronosService = ChronosServiceFactory.create();
     private JComboBox<WorkDaySelectionItem> comboMonthSelection = new JComboBox<>();
     private JComboBox<WorkDaySelectionItem> comboDaySelection = new JComboBox<>();
-    private static final String[] columns = new String[]{"Start", "End", "Duration"};
     private JTable tableWorkList = new JTable();
     private Long taskId;
     private JLabel labelDailyTask = new JLabel();
+    private WorkTableModel workTableModel = new WorkTableModel();
+    private FilterWorkResponse filterWorkResponse;
 
     public WorkPanel(Long taskId) {
         setLayout(new BorderLayout());
@@ -35,13 +36,30 @@ public class WorkPanel extends JPanel implements ActionListener {
     private void initHandlers() {
         comboDaySelection.addActionListener(this);
         comboMonthSelection.addActionListener(this);
-    }
 
+        workTableModel.setWorkUpdateEvent(work -> {
+            if (filterWorkResponse == null) {
+                return;
+            }
+
+            try {
+                chronosService.saveWork(work);
+            } catch (ChronosServiceException e) {
+                e.printStackTrace();
+            } catch (ChronosCoreException e) {
+                e.printStackTrace();
+            }
+
+            updateWorkFilter();
+            updateTotalTaskLabel();
+        });
+    }
 
     private void createLayout() {
         add(createDaySelectionPanel(), BorderLayout.NORTH);
 
         tableWorkList.setFillsViewportHeight(true);
+        tableWorkList.setModel(workTableModel);
 
         JScrollPane scrollPane = new JScrollPane(tableWorkList);
         add(scrollPane, BorderLayout.CENTER);
@@ -71,6 +89,19 @@ public class WorkPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent event) {
+        updateWorkFilter();
+        workTableModel.setWorkList(filterWorkResponse.getWorkList());
+        workTableModel.fireTableDataChanged();
+        updateTotalTaskLabel();
+    }
+
+    private void updateTotalTaskLabel() {
+        String dailyTask = String.format("Total: %s",
+                DateTimeHelper.printDuration(filterWorkResponse.getTotalDuration().toPeriod()));
+        labelDailyTask.setText(dailyTask);
+    }
+
+    private void updateWorkFilter() {
         final Integer selectedMonth = getSelectedMonth();
         final Integer selectedDay = getSelectedDay();
 
@@ -79,11 +110,7 @@ public class WorkPanel extends JPanel implements ActionListener {
         filterWorkRequest.setDay(selectedDay);
 
         try {
-            FilterWorkResponse filterWorkResponse = chronosService.filterWorks(taskId, filterWorkRequest);
-            tableWorkList.setModel(new WorkTableModel(filterWorkResponse.getWorkList()));
-            String dailyTask = String.format("Total: %s",
-                    DateTimeHelper.printDuration(filterWorkResponse.getTotalDuration().toPeriod()));
-            labelDailyTask.setText(dailyTask);
+            filterWorkResponse = chronosService.filterWorks(taskId, filterWorkRequest);
         } catch (ChronosCoreException e) {
             e.printStackTrace();
         } catch (ChronosServiceException e) {
@@ -108,22 +135,20 @@ public class WorkPanel extends JPanel implements ActionListener {
 
         return ((WorkDaySelectionItem) selectedItem).getValue();
     }
+}
 
-    class WorkDaySelectionItem extends AbstractComboBoxItem<Integer> {
+class WorkDaySelectionItem extends AbstractComboBoxItem<Integer> {
 
-        public WorkDaySelectionItem(Integer value) {
-            super(value);
-        }
-
-        @Override
-        public String getLabel() {
-            if (getValue() == null) {
-                return "All";
-            }
-
-            return String.format("%02d", getValue());
-        }
+    public WorkDaySelectionItem(Integer value) {
+        super(value);
     }
 
+    @Override
+    public String getLabel() {
+        if (getValue() == null) {
+            return "All";
+        }
 
+        return String.format("%02d", getValue());
+    }
 }
