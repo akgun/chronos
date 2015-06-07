@@ -5,6 +5,7 @@ import com.akgund.chronos.model.FilterWorkRequest;
 import com.akgund.chronos.model.FilterWorkResponse;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
+import com.akgund.chronos.model.report.DateReport;
 
 import java.util.List;
 
@@ -28,4 +29,6 @@ public interface IChronosService {
     void activateTask(Long taskId) throws ChronosCoreException, ChronosServiceException;
 
     void deactivateActiveTask() throws ChronosCoreException;
+
+    DateReport getReport(FilterWorkRequest filterWorkRequest) throws ChronosCoreException;
 }

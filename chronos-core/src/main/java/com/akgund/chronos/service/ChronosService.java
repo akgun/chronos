@@ -3,6 +3,8 @@ package com.akgund.chronos.service;
 import com.akgund.chronos.core.ChronosCoreException;
 import com.akgund.chronos.core.IChronosTasksDAL;
 import com.akgund.chronos.model.*;
+import com.akgund.chronos.model.report.DateReport;
+import com.akgund.chronos.model.report.WorkReport;
 import com.google.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -211,5 +213,51 @@ public class ChronosService implements IChronosService {
         }
 
         return dateTime.withSecondOfMinute(0).withMillisOfSecond(0);
+    }
+
+    @Override
+    public DateReport getReport(FilterWorkRequest filterWorkRequest) throws ChronosCoreException {
+        List<Task> tasks = listTasks();
+
+        DateReport dateReport = new DateReport();
+
+        tasks.stream().forEach(task -> {
+
+            List<Work> works = task.getWorkList().stream()
+                    .filter(work -> {
+                        if (filterWorkRequest.getYear() != null) {
+                            return work.getStart().getYear() == filterWorkRequest.getYear();
+                        }
+
+                        return true;
+                    })
+                    .filter(work -> {
+                        if (filterWorkRequest.getMonth() != null) {
+                            return work.getStart().getMonthOfYear() == filterWorkRequest.getMonth();
+                        }
+
+                        return true;
+                    })
+                    .filter(work -> {
+                        if (filterWorkRequest.getDay() != null) {
+                            return work.getStart().getDayOfMonth() == filterWorkRequest.getDay();
+                        }
+
+                        return true;
+                    }).collect(Collectors.toList());
+
+            Collections.sort(works, new WorkComparator());
+
+            works.forEach(work -> {
+                WorkReport workReport = new WorkReport();
+                workReport.setWork(work);
+                workReport.setTaskName(task.getName());
+
+                dateReport.getWorkReportList().add(workReport);
+            });
+
+        });
+
+        return dateReport;
     }
 }
