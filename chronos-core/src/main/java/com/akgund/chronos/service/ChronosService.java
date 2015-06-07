@@ -80,6 +80,11 @@ public class ChronosService implements IChronosService {
             task.setId(generateId());
         }
 
+        task.getWorkList().stream().forEach(work -> {
+            if (work.getId() == null) {
+                work.setId(generateId());
+            }
+        });
         Collections.sort(task.getWorkList(), new WorkComparator());
 
         chronosTasks.getTasks().put(task.getId(), task);
@@ -104,6 +109,7 @@ public class ChronosService implements IChronosService {
             existingWork.setEnd(work.getEnd());
             existingWork.setComment(work.getComment());
         } else {
+            work.setId(generateId());
             /* new work. */
             task.getWorkList().add(work);
         }
