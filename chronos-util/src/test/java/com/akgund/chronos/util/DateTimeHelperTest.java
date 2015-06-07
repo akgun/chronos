@@ -27,4 +27,14 @@ public class DateTimeHelperTest {
         String output = DateTimeHelper.printDuration(new Period(dateTime1, dateTime2));
         assertEquals("4 hours 1 minutes 7 seconds", output);
     }
+
+    @Test
+    public void testParseDate() {
+        DateTime dateTime = DateTimeHelper.parseDate("05/12 10:50");
+        assertEquals(5, dateTime.getDayOfMonth());
+        assertEquals(12, dateTime.getMonthOfYear());
+        assertEquals(DateTime.now().getYear(), dateTime.getYear());
+        assertEquals(10, dateTime.getHourOfDay());
+        assertEquals(50, dateTime.getMinuteOfHour());
+    }
 }

@@ -4,19 +4,15 @@ import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.ChronosCoreException;
 import com.akgund.chronos.model.FilterWorkRequest;
 import com.akgund.chronos.model.FilterWorkResponse;
-import com.akgund.chronos.model.Work;
 import com.akgund.chronos.service.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.DateTimeHelper;
 import org.joda.time.DateTime;
-import org.joda.time.Period;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.stream.IntStream;
 
 public class WorkPanel extends JPanel implements ActionListener {
@@ -73,30 +69,6 @@ public class WorkPanel extends JPanel implements ActionListener {
         return jPanel;
     }
 
-    private Object[][] createTableData(List<Work> works) {
-        if (works == null) {
-            return new Object[][]{};
-        }
-
-        Object[][] data = new Object[works.size()][3];
-
-        for (int i = 0; i < works.size(); i++) {
-            DateTime start = works.get(i).getStart();
-            DateTime end = works.get(i).getEnd();
-
-            Period duration = Period.millis(-1);
-            if (end != null) {
-                duration = DateTimeHelper.getDiff(start, end);
-            }
-
-            data[i][0] = DateTimeHelper.printDate(start);
-            data[i][1] = end != null ? DateTimeHelper.printDate(end) : "current";
-            data[i][2] = DateTimeHelper.printDuration(duration);
-        }
-
-        return data;
-    }
-
     @Override
     public void actionPerformed(ActionEvent event) {
         final Integer selectedMonth = getSelectedMonth();
@@ -108,7 +80,7 @@ public class WorkPanel extends JPanel implements ActionListener {
 
         try {
             FilterWorkResponse filterWorkResponse = chronosService.filterWorks(taskId, filterWorkRequest);
-            tableWorkList.setModel(new DefaultTableModel(createTableData(filterWorkResponse.getWorkList()), columns));
+            tableWorkList.setModel(new WorkTableModel(filterWorkResponse.getWorkList()));
             String dailyTask = String.format("Total: %s",
                     DateTimeHelper.printDuration(filterWorkResponse.getTotalDuration().toPeriod()));
             labelDailyTask.setText(dailyTask);
@@ -152,4 +124,6 @@ public class WorkPanel extends JPanel implements ActionListener {
             return String.format("%02d", getValue());
         }
     }
+
+
 }
