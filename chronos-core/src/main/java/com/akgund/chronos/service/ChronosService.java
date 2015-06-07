@@ -127,6 +127,10 @@ public class ChronosService implements IChronosService {
     public void deleteWork(Long taskId, Long workId) throws ChronosCoreException, ChronosServiceException {
         Task task = getTask(taskId);
 
+        if (task == null) {
+            throw new ChronosServiceException(String.format("Task not found. Task id: %s", taskId));
+        }
+
         boolean deleted = task.getWorkList().removeIf(work -> work.getId().equals(workId));
         if (!deleted) {
             throw new ChronosServiceException(String.format("Delete failed. Task id: %s, work id: %s.", taskId, workId));
