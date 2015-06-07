@@ -1,4 +1,4 @@
-package com.akgund.chronos.gui;
+package com.akgund.chronos.gui.panel;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,8 @@
-package com.akgund.chronos.gui;
+package com.akgund.chronos.gui.dialog;
 
 import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.ChronosCoreException;
+import com.akgund.chronos.gui.widget.DateTimeSelector;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
 import com.akgund.chronos.service.ChronosServiceException;

@@ -1,4 +1,4 @@
-package com.akgund.chronos.gui;
+package com.akgund.chronos.gui.widget;
 
 public abstract class AbstractComboBoxItem<T> {
     private String label;

@@ -1,4 +1,4 @@
-package com.akgund.chronos.gui;
+package com.akgund.chronos.gui.dialog;
 
 import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.ChronosCoreException;

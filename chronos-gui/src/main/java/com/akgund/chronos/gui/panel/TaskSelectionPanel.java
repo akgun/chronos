@@ -1,10 +1,12 @@
-package com.akgund.chronos.gui;
+package com.akgund.chronos.gui.panel;
 
 import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.ChronosCoreException;
 import com.akgund.chronos.gui.bus.IMessageClient;
 import com.akgund.chronos.gui.bus.MessageBus;
 import com.akgund.chronos.gui.bus.MessageType;
+import com.akgund.chronos.gui.event.ITaskSelectionEvent;
+import com.akgund.chronos.gui.widget.AbstractComboBoxItem;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.service.IChronosService;
 

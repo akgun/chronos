@@ -3,6 +3,9 @@ package com.akgund.chronos.gui;
 import com.akgund.chronos.gui.bus.IMessageClient;
 import com.akgund.chronos.gui.bus.MessageBus;
 import com.akgund.chronos.gui.bus.MessageType;
+import com.akgund.chronos.gui.dialog.AddTaskDialog;
+import com.akgund.chronos.gui.panel.MainPanel;
+import com.akgund.chronos.gui.panel.TaskSelectionPanel;
 
 import javax.swing.*;
 import java.awt.*;

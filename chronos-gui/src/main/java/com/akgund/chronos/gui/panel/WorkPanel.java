@@ -1,7 +1,9 @@
-package com.akgund.chronos.gui;
+package com.akgund.chronos.gui.panel;
 
 import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.ChronosCoreException;
+import com.akgund.chronos.gui.widget.AbstractComboBoxItem;
+import com.akgund.chronos.gui.widget.WorkTableModel;
 import com.akgund.chronos.model.FilterWorkRequest;
 import com.akgund.chronos.model.FilterWorkResponse;
 import com.akgund.chronos.model.Work;

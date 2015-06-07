@@ -1,5 +1,6 @@
-package com.akgund.chronos.gui;
+package com.akgund.chronos.gui.widget;
 
+import com.akgund.chronos.gui.event.IWorkUpdateEvent;
 import com.akgund.chronos.model.Work;
 import com.akgund.chronos.util.DateTimeHelper;
 import org.joda.time.DateTime;

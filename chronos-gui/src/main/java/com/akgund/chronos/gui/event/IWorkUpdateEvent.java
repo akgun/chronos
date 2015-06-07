@@ -1,4 +1,4 @@
-package com.akgund.chronos.gui;
+package com.akgund.chronos.gui.event;
 
 import com.akgund.chronos.model.Work;
 
