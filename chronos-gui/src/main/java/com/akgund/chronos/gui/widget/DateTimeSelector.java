@@ -1,23 +1,32 @@
 package com.akgund.chronos.gui.widget;
 
+import com.akgund.chronos.gui.event.IDateTimeSelectionChange;
 import org.joda.time.DateTime;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.stream.IntStream;
 
-public class DateTimeSelector extends JPanel {
+public class DateTimeSelector extends JPanel implements ActionListener {
     private DateTime initialTime;
     private JComboBox<DateTimeAbstractComboBoxItem> comboBoxMonth;
     private JComboBox<DateTimeAbstractComboBoxItem> comboBoxDay;
     private JComboBox<DateTimeAbstractComboBoxItem> comboBoxHour;
     private JComboBox<DateTimeAbstractComboBoxItem> comboBoxMinute;
+    private boolean showDate;
+    private boolean showTime;
+    /* TODO: Support multiple handlers. */
+    private IDateTimeSelectionChange dateTimeSelectionChange;
 
-    public DateTimeSelector() {
-        this(DateTime.now());
+    public DateTimeSelector(boolean showDate, boolean showTime) {
+        this(DateTime.now(), showDate, showTime);
     }
 
-    public DateTimeSelector(DateTime initial) {
+    public DateTimeSelector(DateTime initial, boolean showDate, boolean showTime) {
         this.initialTime = initial;
+        setShowDate(showDate);
+        setShowTime(showTime);
 
         initComboBoxes();
 
@@ -27,14 +36,19 @@ public class DateTimeSelector extends JPanel {
     private void createLayout() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        add(new JLabel("Month:"));
-        add(comboBoxMonth);
-        add(new JLabel("Day:"));
-        add(comboBoxDay);
-        add(new JLabel("Hour:"));
-        add(comboBoxHour);
-        add(new JLabel("Minute:"));
-        add(comboBoxMinute);
+        if (isShowDate()) {
+            add(new JLabel("Month:"));
+            add(comboBoxMonth);
+            add(new JLabel("Day:"));
+            add(comboBoxDay);
+        }
+
+        if (isShowTime()) {
+            add(new JLabel("Hour:"));
+            add(comboBoxHour);
+            add(new JLabel("Minute:"));
+            add(comboBoxMinute);
+        }
     }
 
     private void initComboBoxes() {
@@ -56,6 +70,17 @@ public class DateTimeSelector extends JPanel {
         comboBoxDay.setSelectedIndex(initialTime.getDayOfMonth() - 1);
         comboBoxHour.setSelectedIndex(initialTime.getHourOfDay());
         comboBoxMinute.setSelectedIndex(initialTime.getMinuteOfHour());
+
+        comboBoxMonth.addActionListener(this);
+        comboBoxDay.addActionListener(this);
+        comboBoxHour.addActionListener(this);
+        comboBoxMinute.addActionListener(this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        DateTime dateTime = getDateTime();
+        getDateTimeSelectionChange().onDateTimeChange(dateTime);
     }
 
     public DateTime getDateTime() {
@@ -64,14 +89,59 @@ public class DateTimeSelector extends JPanel {
         DateTimeAbstractComboBoxItem selectedHour = getSelection(comboBoxHour);
         DateTimeAbstractComboBoxItem selectedMinute = getSelection(comboBoxMinute);
 
-        return this.initialTime.withMonthOfYear(selectedMonth.getValue())
-                .withDayOfMonth(selectedDay.getValue())
-                .withHourOfDay(selectedHour.getValue())
-                .withMinuteOfHour(selectedMinute.getValue());
+        DateTime dateTime = initialTime;
+        if (selectedMonth != null && selectedMonth.getValue() != null) {
+            dateTime = dateTime.withMonthOfYear(selectedMonth.getValue());
+        }
+
+        if (selectedDay != null && selectedDay.getValue() != null) {
+            dateTime = dateTime.withDayOfMonth(selectedDay.getValue());
+        }
+
+        if (selectedHour != null && selectedHour.getValue() != null) {
+            dateTime = dateTime.withHourOfDay(selectedHour.getValue());
+        }
+
+        if (selectedMinute != null && selectedMinute.getValue() != null) {
+            dateTime = dateTime.withMinuteOfHour(selectedMinute.getValue());
+        }
+
+        return dateTime;
+
+
     }
 
     private <T> T getSelection(JComboBox<T> comboBox) {
         return (T) comboBox.getSelectedItem();
+    }
+
+    public boolean isShowDate() {
+        return showDate;
+    }
+
+    public void setShowDate(boolean showDate) {
+        this.showDate = showDate;
+    }
+
+    public boolean isShowTime() {
+        return showTime;
+    }
+
+    public void setShowTime(boolean showTime) {
+        this.showTime = showTime;
+    }
+
+    public IDateTimeSelectionChange getDateTimeSelectionChange() {
+        if (dateTimeSelectionChange == null) {
+            setDateTimeSelectionChange(dateTime -> {
+            });
+        }
+
+        return dateTimeSelectionChange;
+    }
+
+    public void setDateTimeSelectionChange(IDateTimeSelectionChange dateTimeSelectionChange) {
+        this.dateTimeSelectionChange = dateTimeSelectionChange;
     }
 }
 

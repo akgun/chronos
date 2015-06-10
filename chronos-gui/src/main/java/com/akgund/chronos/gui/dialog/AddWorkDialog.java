@@ -15,8 +15,8 @@ import java.awt.*;
 public class AddWorkDialog extends JDialog {
     private IChronosService chronosService = ChronosServiceFactory.create();
     private Task task;
-    private DateTimeSelector timeSelectorStart = new DateTimeSelector();
-    private DateTimeSelector timeSelectorEnd = new DateTimeSelector();
+    private DateTimeSelector timeSelectorStart = new DateTimeSelector(true, true);
+    private DateTimeSelector timeSelectorEnd = new DateTimeSelector(true, true);
     private JButton buttonAddWork = new JButton("Add Work");
 
     public AddWorkDialog(Long taskId) {
