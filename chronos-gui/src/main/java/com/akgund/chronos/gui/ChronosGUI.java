@@ -4,6 +4,7 @@ import com.akgund.chronos.gui.bus.IMessageClient;
 import com.akgund.chronos.gui.bus.MessageBus;
 import com.akgund.chronos.gui.bus.MessageType;
 import com.akgund.chronos.gui.dialog.AddTaskDialog;
+import com.akgund.chronos.gui.dialog.ReportDialog;
 import com.akgund.chronos.gui.panel.MainPanel;
 import com.akgund.chronos.gui.panel.TaskSelectionPanel;
 
@@ -34,6 +35,13 @@ public class ChronosGUI extends JFrame implements IMessageClient {
             pack();
         });
         menuSettings.add(menuItemAddTask);
+
+        JMenuItem menuItemWorkReport = new JMenuItem("Show Work Report");
+        menuItemWorkReport.addActionListener(e -> {
+            ReportDialog reportDialog = new ReportDialog();
+            reportDialog.setVisible(true);
+        });
+        menuSettings.add(menuItemWorkReport);
 
         menuBar.add(menuSettings);
 
