@@ -246,8 +246,6 @@ public class ChronosService implements IChronosService {
                         return true;
                     }).collect(Collectors.toList());
 
-            Collections.sort(works, new WorkComparator());
-
             works.forEach(work -> {
                 WorkReport workReport = new WorkReport();
                 workReport.setWork(work);
@@ -257,6 +255,9 @@ public class ChronosService implements IChronosService {
             });
 
         });
+
+        /* Sort reports. */
+        Collections.sort(dateReport.getWorkReportList(), new WorkReportComparator());
 
         return dateReport;
     }

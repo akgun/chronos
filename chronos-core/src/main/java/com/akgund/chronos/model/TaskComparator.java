@@ -1,7 +1,5 @@
 package com.akgund.chronos.model;
 
-import com.akgund.chronos.model.Task;
-
 import java.util.Comparator;
 
 public class TaskComparator implements Comparator<Task> {
