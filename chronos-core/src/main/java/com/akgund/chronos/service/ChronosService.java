@@ -256,6 +256,9 @@ public class ChronosService implements IChronosService {
 
         });
 
+        /* Remove unfinished works. */
+        dateReport.getWorkReportList().removeIf(workReport -> workReport.getWork().getEnd() == null);
+
         /* Sort reports. */
         Collections.sort(dateReport.getWorkReportList(), new WorkReportComparator());
 
