@@ -11,11 +11,7 @@
     <packaging>jar</packaging>
 
     <name>chronos-gui</name>
-    <url>http://maven.apache.org</url>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <url>http://akgund.com</url>
 
     <dependencies>
         <dependency>
@@ -31,7 +27,7 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>2.7</version>
+            <version>${joda-time.version}</version>
         </dependency>
     </dependencies>
 
