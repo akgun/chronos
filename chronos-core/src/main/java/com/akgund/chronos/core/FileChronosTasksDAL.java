@@ -5,6 +5,7 @@ import com.akgund.chronos.model.ChronosTasks;
 import com.google.inject.Inject;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +19,12 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
 
     @Override
     public ChronosTasks get() throws ChronosCoreException {
-        String uri = chronosURI.getURI();
+        String uri;
+		try {
+			uri = chronosURI.getURI();
+		} catch (URISyntaxException e) {
+			throw new ChronosCoreException(e.getMessage(), e);
+		}
         String content;
 
         try {
@@ -42,7 +48,12 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
     @Override
     public void save(ChronosTasks chronosTasks) throws ChronosCoreException {
         String data = chronosSerializer.serialize(chronosTasks);
-        String uri = chronosURI.getURI();
+        String uri;
+		try {
+			uri = chronosURI.getURI();
+		} catch (URISyntaxException e) {
+			throw new ChronosCoreException(e.getMessage(), e);
+		}
 
         try {
             Path path = Paths.get(uri);
