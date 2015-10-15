@@ -1,0 +1,3 @@
+include 'chronos-core'
+include 'chronos-gui'
+include 'chronos-util'
