@@ -12,6 +12,8 @@ bin/
 # intellij
 .idea/
 *.iml
+*.ipr
+*.iws
 
 # eclipse
 .classpath

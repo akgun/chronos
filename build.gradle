@@ -11,6 +11,8 @@ ext {
 allprojects {
 	group = 'com.akgund.chronos'
 	version = version
+
+	apply plugin: 'idea'
 }
 
 subprojects {
@@ -22,6 +24,8 @@ subprojects {
 	repositories {
 		mavenCentral()
 	}
+
+	apply from: "$rootDir/gradle/jacoco.gradle"
 }
 
 project(':chronos-core') {
