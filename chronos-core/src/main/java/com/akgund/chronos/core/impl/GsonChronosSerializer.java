@@ -1,9 +1,8 @@
-package com.akgund.chronos.core;
+package com.akgund.chronos.core.impl;
 
+import com.akgund.chronos.core.IChronosSerializer;
 import com.akgund.chronos.model.ChronosTasks;
 import com.google.gson.Gson;
-
-import javax.inject.Inject;
 
 public class GsonChronosSerializer implements IChronosSerializer {
     private Gson gson = GsonProducer.newGson();

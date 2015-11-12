@@ -1,5 +1,6 @@
 package com.akgund.chronos.core;
 
+import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.model.ChronosTasks;
 
 public interface IChronosTasksDAL {

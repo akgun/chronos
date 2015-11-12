@@ -1,4 +1,4 @@
-package com.akgund.chronos.core;
+package com.akgund.chronos.core.impl;
 
 import com.google.gson.*;
 import org.joda.time.DateTime;

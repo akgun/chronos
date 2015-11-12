@@ -1,6 +1,9 @@
-package com.akgund.chronos.core;
+package com.akgund.chronos.core.impl;
 
 
+import com.akgund.chronos.core.IChronosSerializer;
+import com.akgund.chronos.core.IChronosTasksDAL;
+import com.akgund.chronos.core.IChronosURI;
 import com.akgund.chronos.model.ChronosTasks;
 import com.google.inject.Inject;
 

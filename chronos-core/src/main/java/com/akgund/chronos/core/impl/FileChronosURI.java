@@ -1,4 +1,6 @@
-package com.akgund.chronos.core;
+package com.akgund.chronos.core.impl;
+
+import com.akgund.chronos.core.IChronosURI;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;

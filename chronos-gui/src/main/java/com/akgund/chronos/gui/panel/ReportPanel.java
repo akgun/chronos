@@ -1,7 +1,7 @@
 package com.akgund.chronos.gui.panel;
 
 import com.akgund.chronos.ChronosServiceFactory;
-import com.akgund.chronos.core.ChronosCoreException;
+import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.gui.widget.DateTimeSelector;
 import com.akgund.chronos.gui.widget.ReportTableModel;
 import com.akgund.chronos.model.FilterWorkRequest;

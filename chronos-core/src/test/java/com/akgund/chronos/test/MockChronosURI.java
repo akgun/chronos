@@ -4,7 +4,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import com.akgund.chronos.core.FileChronosURI;
+import com.akgund.chronos.core.impl.FileChronosURI;
 
 public class MockChronosURI extends FileChronosURI {
 	@Override

@@ -1,6 +1,6 @@
 package com.akgund.chronos.service;
 
-import com.akgund.chronos.core.ChronosCoreException;
+import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.core.IChronosTasksDAL;
 import com.akgund.chronos.model.*;
 import com.akgund.chronos.model.report.DateReport;

@@ -1,4 +1,4 @@
-package com.akgund.chronos.core;
+package com.akgund.chronos.core.impl;
 
 public class ChronosCoreException extends Exception {
 

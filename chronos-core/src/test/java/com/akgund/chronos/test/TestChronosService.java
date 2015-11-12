@@ -1,6 +1,6 @@
 package com.akgund.chronos.test;
 
-import com.akgund.chronos.core.ChronosCoreException;
+import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.model.FilterWorkRequest;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
