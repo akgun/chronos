@@ -3,7 +3,7 @@ package com.akgund.chronos.test;
 import com.akgund.chronos.core.*;
 import com.akgund.chronos.core.impl.FileChronosTasksDAL;
 import com.akgund.chronos.core.impl.GsonChronosSerializer;
-import com.akgund.chronos.service.ChronosService;
+import com.akgund.chronos.service.impl.ChronosService;
 import com.akgund.chronos.service.IChronosService;
 import com.google.inject.AbstractModule;
 

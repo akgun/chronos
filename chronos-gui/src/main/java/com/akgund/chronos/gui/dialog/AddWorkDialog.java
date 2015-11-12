@@ -5,7 +5,7 @@ import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.gui.widget.DateTimeSelector;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
-import com.akgund.chronos.service.ChronosServiceException;
+import com.akgund.chronos.service.impl.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.GUIUtil;
 

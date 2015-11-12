@@ -7,7 +7,7 @@ import com.akgund.chronos.gui.widget.WorkTableModel;
 import com.akgund.chronos.model.FilterWorkRequest;
 import com.akgund.chronos.model.FilterWorkResponse;
 import com.akgund.chronos.model.Work;
-import com.akgund.chronos.service.ChronosServiceException;
+import com.akgund.chronos.service.impl.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.DateTimeHelper;
 import org.joda.time.DateTime;

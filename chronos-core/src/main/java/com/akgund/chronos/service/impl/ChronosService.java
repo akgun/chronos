@@ -1,10 +1,11 @@
-package com.akgund.chronos.service;
+package com.akgund.chronos.service.impl;
 
 import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.core.IChronosTasksDAL;
 import com.akgund.chronos.model.*;
 import com.akgund.chronos.model.report.DateReport;
 import com.akgund.chronos.model.report.WorkReport;
+import com.akgund.chronos.service.IChronosService;
 import com.google.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;

@@ -7,7 +7,7 @@ import com.akgund.chronos.gui.ChronosGUI;
 import com.akgund.chronos.gui.bus.MessageBus;
 import com.akgund.chronos.gui.bus.MessageType;
 import com.akgund.chronos.model.Task;
-import com.akgund.chronos.service.ChronosServiceException;
+import com.akgund.chronos.service.impl.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.GUIUtil;
 

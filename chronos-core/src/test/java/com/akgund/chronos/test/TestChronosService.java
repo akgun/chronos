@@ -6,7 +6,7 @@ import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
 import com.akgund.chronos.model.report.DateReport;
 import com.akgund.chronos.model.report.WorkReport;
-import com.akgund.chronos.service.ChronosServiceException;
+import com.akgund.chronos.service.impl.ChronosServiceException;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
