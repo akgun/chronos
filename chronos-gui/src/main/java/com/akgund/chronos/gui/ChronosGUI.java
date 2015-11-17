@@ -10,6 +10,8 @@ import com.akgund.chronos.gui.panel.TaskSelectionPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 public class ChronosGUI extends JFrame implements IMessageClient {
 
@@ -20,6 +22,8 @@ public class ChronosGUI extends JFrame implements IMessageClient {
         setContentPane(new MainPanel());
         setJMenuBar(createMenu());
         pack();
+
+        addWindowListener(new ChronosWindowListener());
     }
 
     private JMenuBar createMenu() {
@@ -53,5 +57,41 @@ public class ChronosGUI extends JFrame implements IMessageClient {
         if (MessageType.PACK == message) {
             pack();
         }
+    }
+}
+
+class ChronosWindowListener implements WindowListener {
+    @Override
+    public void windowOpened(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+
     }
 }
