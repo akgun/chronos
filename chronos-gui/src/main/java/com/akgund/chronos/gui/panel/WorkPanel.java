@@ -7,8 +7,10 @@ import com.akgund.chronos.gui.widget.WorkTableModel;
 import com.akgund.chronos.model.FilterWorkRequest;
 import com.akgund.chronos.model.FilterWorkResponse;
 import com.akgund.chronos.model.Work;
-import com.akgund.chronos.service.impl.ChronosServiceException;
+import com.akgund.chronos.model.settings.Settings;
 import com.akgund.chronos.service.IChronosService;
+import com.akgund.chronos.service.IChronosSettingsService;
+import com.akgund.chronos.service.impl.ChronosServiceException;
 import com.akgund.chronos.util.DateTimeHelper;
 import org.joda.time.DateTime;
 
@@ -16,10 +18,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 public class WorkPanel extends JPanel implements ActionListener {
+    private static Timer totalWorkTimer;
     private IChronosService chronosService = ChronosServiceFactory.create();
+    private IChronosSettingsService chronosSettingsService = ChronosServiceFactory.createSettings();
     private JComboBox<WorkDaySelectionItem> comboMonthSelection = new JComboBox<>();
     private JComboBox<WorkDaySelectionItem> comboDaySelection = new JComboBox<>();
     private JTable tableWorkList = new JTable();
@@ -34,6 +39,38 @@ public class WorkPanel extends JPanel implements ActionListener {
         initHandlers();
 
         createLayout();
+        initTotalWorkTimer();
+    }
+
+    private void initTotalWorkTimer() {
+        try {
+            Settings settings = chronosSettingsService.getSettings();
+            startTotalWorkTimer((int) settings.getWorkLogRefreshInterval());
+        } catch (ChronosCoreException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void stopTotalWorkTimer() {
+        if (totalWorkTimer != null) {
+            totalWorkTimer.stop();
+        }
+    }
+
+    private void startTotalWorkTimer(int intervalInSec) {
+        /* Not a valid value. */
+        if (intervalInSec <= 0) {
+            return;
+        }
+
+        /* Stop previous timer. */
+        stopTotalWorkTimer();
+
+        /* Create new one. */
+        totalWorkTimer = new Timer((int) TimeUnit.SECONDS.toMillis(intervalInSec),
+                (e) -> refreshData());
+        totalWorkTimer.setRepeats(true);
+        totalWorkTimer.start();
     }
 
     private void initHandlers() {

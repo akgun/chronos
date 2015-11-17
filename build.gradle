@@ -74,5 +74,8 @@ project(':chronos-gui') {
         classpath = sourceSets.main.runtimeClasspath
 
         main = chronosMainClass
+
+        /* Enable flight recorder. */
+        jvmArgs '-XX:+UnlockCommercialFeatures', '-XX:+FlightRecorder'
     }
 }
