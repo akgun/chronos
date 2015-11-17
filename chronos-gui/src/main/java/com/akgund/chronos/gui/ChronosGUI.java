@@ -1,5 +1,7 @@
 package com.akgund.chronos.gui;
 
+import com.akgund.chronos.ChronosServiceFactory;
+import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.gui.bus.IMessageClient;
 import com.akgund.chronos.gui.bus.MessageBus;
 import com.akgund.chronos.gui.bus.MessageType;
@@ -7,6 +9,9 @@ import com.akgund.chronos.gui.dialog.AddTaskDialog;
 import com.akgund.chronos.gui.dialog.ReportDialog;
 import com.akgund.chronos.gui.panel.MainPanel;
 import com.akgund.chronos.gui.panel.TaskSelectionPanel;
+import com.akgund.chronos.model.settings.Position;
+import com.akgund.chronos.model.settings.Settings;
+import com.akgund.chronos.service.IChronosSettingsService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +28,19 @@ public class ChronosGUI extends JFrame implements IMessageClient {
         setJMenuBar(createMenu());
         pack();
 
+        initPosition();
         addWindowListener(new ChronosWindowListener());
+    }
+
+    private void initPosition() {
+        try {
+            IChronosSettingsService settingsService = ChronosServiceFactory.createSettings();
+            Settings settings = settingsService.getSettings();
+            Position windowPosition = settings.getWindowLastPosition();
+            setLocation(windowPosition.getX(), windowPosition.getY());
+        } catch (ChronosCoreException e) {
+           /* Use default settings. */
+        }
     }
 
     private JMenuBar createMenu() {
@@ -68,6 +85,16 @@ class ChronosWindowListener implements WindowListener {
 
     @Override
     public void windowClosing(WindowEvent e) {
+        try {
+            Point locationOnScreen = e.getWindow().getLocationOnScreen();
+            IChronosSettingsService settingsService = ChronosServiceFactory.createSettings();
+            Settings settings = settingsService.getSettings();
+            settings.getWindowLastPosition().setX((int) locationOnScreen.getX());
+            settings.getWindowLastPosition().setY((int) locationOnScreen.getY());
+            settingsService.saveSettings(settings);
+        } catch (ChronosCoreException ex) {
+           /* Do nothing. */
+        }
     }
 
     @Override

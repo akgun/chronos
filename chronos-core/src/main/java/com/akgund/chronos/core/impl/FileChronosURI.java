@@ -10,9 +10,20 @@ public class FileChronosURI implements IChronosURI {
 
     @Override
     public String getDataURI() throws URISyntaxException {
-        Path path = Paths.get(userHome(), chronosFolder(), chronosDataFile());
+        Path path = getPath(chronosDataFile());
 
         return path.toString();
+    }
+
+    @Override
+    public String getSettingsURI() throws URISyntaxException {
+        Path path = getPath(chronosSettingsFile());
+
+        return path.toString();
+    }
+
+    public Path getPath(String file) {
+        return Paths.get(userHome(), chronosFolder(), file);
     }
 
     public String userHome() {
@@ -25,5 +36,9 @@ public class FileChronosURI implements IChronosURI {
 
     public String chronosDataFile() {
         return "data.json";
+    }
+
+    public String chronosSettingsFile() {
+        return "settings.json";
     }
 }

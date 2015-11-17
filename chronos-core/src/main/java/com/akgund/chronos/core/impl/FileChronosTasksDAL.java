@@ -44,12 +44,12 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
             throw new ChronosCoreException("Couldn't read file content.", e);
         }
 
-        return chronosSerializer.deserialize(content);
+        return chronosSerializer.deserializeData(content);
     }
 
     @Override
     public void save(ChronosTasks chronosTasks) throws ChronosCoreException {
-        String data = chronosSerializer.serialize(chronosTasks);
+        String data = chronosSerializer.serializeData(chronosTasks);
         String uri;
 		try {
 			uri = chronosURI.getDataURI();
