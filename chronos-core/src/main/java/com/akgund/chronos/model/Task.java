@@ -8,6 +8,7 @@ public class Task {
     private String name;
     private List<Work> workList;
     private boolean active;
+    private boolean archived;
 
     public Task() {
         workList = new ArrayList<>();
@@ -43,5 +44,13 @@ public class Task {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
     }
 }

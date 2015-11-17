@@ -1,7 +1,7 @@
 package com.akgund.chronos.service.impl;
 
-import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.core.IChronosTasksDAL;
+import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.model.*;
 import com.akgund.chronos.model.report.DateReport;
 import com.akgund.chronos.model.report.WorkReport;
@@ -10,7 +10,6 @@ import com.google.inject.Inject;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,8 +21,11 @@ public class ChronosService implements IChronosService {
 
     @Override
     public List<Task> listTasks() throws ChronosCoreException {
-        ChronosTasks chronosTasks = chronosTasksDAL.get();
-        return new ArrayList<>(chronosTasks.getTasks().values());
+        final ChronosTasks chronosTasks = chronosTasksDAL.get();
+
+        /* Get only not archived tasks. */
+        return chronosTasks.getTasks().values().stream()
+                .filter(task -> !task.isArchived()).collect(Collectors.toList());
     }
 
     @Override
