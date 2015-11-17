@@ -1,69 +1,78 @@
 ext {
-	libs = [guice: 'com.google.inject:guice:4.0',
-			gson: 'com.google.code.gson:gson:2.4',
-			joda: 'joda-time:joda-time:2.8.2',
-			junit: 'junit:junit:4.12']
+    libs = [guice: 'com.google.inject:guice:4.0',
+            gson : 'com.google.code.gson:gson:2.4',
+            joda : 'joda-time:joda-time:2.8.2',
+            junit: 'junit:junit:4.12']
 
-	chronosQualifier = [group: 'com.akgund.chronos', version: '1.0']
+    chronosQualifier = [group: 'com.akgund.chronos', version: '1.0']
 }
 
 
 allprojects {
-	group 	= chronosQualifier.group
-	version = chronosQualifier.version
+    group = chronosQualifier.group
+    version = chronosQualifier.version
 
-	apply plugin: 'idea'
+    apply plugin: 'idea'
 }
 
 subprojects {
-	apply plugin: 'java'
+    apply plugin: 'java'
 
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
-	repositories {
-		mavenCentral()
-	}
+    repositories {
+        mavenCentral()
+    }
 
-	apply from: "$rootDir/gradle/jacoco.gradle"
+    apply from: "$rootDir/gradle/jacoco.gradle"
 }
 
 project(':chronos-core') {
-	dependencies {
-		compile libs.guice
-		compile libs.gson
-		compile libs.joda
+    dependencies {
+        compile libs.guice
+        compile libs.gson
+        compile libs.joda
 
-		testCompile libs.junit
-	}
+        testCompile libs.junit
+    }
 }
 
 project(':chronos-util') {
-	dependencies {
-		compile libs.joda
+    dependencies {
+        compile libs.joda
 
-		testCompile libs.junit
-	}
+        testCompile libs.junit
+    }
 }
 
 project(':chronos-gui') {
-	dependencies {
-		compile project(':chronos-core')
-		compile project(':chronos-util')
+    dependencies {
+        compile project(':chronos-core')
+        compile project(':chronos-util')
 
-		compile libs.joda
-	}
+        compile libs.joda
+    }
 
-	task fatJar(type: Jar) {
-	    manifest {
-	        attributes 	'Main-Class': 'com.akgund.chronos.gui.Program', 
-	        			'Version': chronosQualifier.version
-	    }
+    ext {
+        chronosMainClass = 'com.akgund.chronos.gui.Program'
+    }
 
-	    baseName = rootProject.name
-	    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-	    with jar
-	}
+    task fatJar(type: Jar, description: 'Builds a runnable jar.', group: 'Chronos Utils') {
+        manifest {
+            attributes 'Main-Class': chronosMainClass,
+                    'Version': chronosQualifier.version
+        }
 
-	build.dependsOn fatJar
+        baseName = rootProject.name
+        from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+        with jar
+    }
+    build.dependsOn fatJar
+
+    task runApp(type: JavaExec, description: 'Runs main class.', group: 'Chronos Utils') {
+        classpath = sourceSets.main.runtimeClasspath
+
+        main = chronosMainClass
+    }
 }
