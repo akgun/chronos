@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 public class FileChronosURI implements IChronosURI {
 
     @Override
-    public String getURI() throws URISyntaxException {
+    public String getDataURI() throws URISyntaxException {
         Path path = Paths.get(userHome(), chronosFolder(), chronosDataFile());
 
         return path.toString();

@@ -4,5 +4,5 @@ import java.net.URISyntaxException;
 
 public interface IChronosURI {
 
-    String getURI() throws URISyntaxException;
+    String getDataURI() throws URISyntaxException;
 }

@@ -23,7 +23,7 @@ public class MockChronosURI extends FileChronosURI {
 	}
 
 	@Override
-	public String getURI() throws URISyntaxException {
+	public String getDataURI() throws URISyntaxException {
 		Path path = Paths.get(getClass().getClassLoader().getResource("test.json").toURI());
 
 		return path.toAbsolutePath().toString();

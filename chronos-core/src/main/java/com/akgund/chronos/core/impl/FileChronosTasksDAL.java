@@ -24,7 +24,7 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
     public ChronosTasks get() throws ChronosCoreException {
         String uri;
 		try {
-			uri = chronosURI.getURI();
+			uri = chronosURI.getDataURI();
 		} catch (URISyntaxException e) {
 			throw new ChronosCoreException(e.getMessage(), e);
 		}
@@ -43,9 +43,8 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
         } catch (IOException e) {
             throw new ChronosCoreException("Couldn't read file content.", e);
         }
-        ChronosTasks chronosTasks = chronosSerializer.deserialize(content);
 
-        return chronosTasks;
+        return chronosSerializer.deserialize(content);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
         String data = chronosSerializer.serialize(chronosTasks);
         String uri;
 		try {
-			uri = chronosURI.getURI();
+			uri = chronosURI.getDataURI();
 		} catch (URISyntaxException e) {
 			throw new ChronosCoreException(e.getMessage(), e);
 		}

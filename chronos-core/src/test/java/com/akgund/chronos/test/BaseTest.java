@@ -17,11 +17,11 @@ public class BaseTest {
 
     @Before
     public void before() throws IOException, URISyntaxException {
-        originalData = new String(Files.readAllBytes(Paths.get(chronosURI.getURI())));
+        originalData = new String(Files.readAllBytes(Paths.get(chronosURI.getDataURI())));
     }
 
     @After
     public void after() throws IOException, URISyntaxException {
-        Files.write(Paths.get(chronosURI.getURI()), originalData.getBytes());
+        Files.write(Paths.get(chronosURI.getDataURI()), originalData.getBytes());
     }
 }
