@@ -17,6 +17,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class ChronosGUI extends JFrame implements IMessageClient {
 
@@ -46,25 +49,38 @@ public class ChronosGUI extends JFrame implements IMessageClient {
     private JMenuBar createMenu() {
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu menuSettings = new JMenu("Settings");
+        JMenu menuPreferences = new JMenu("Preferences");
         JMenuItem menuItemAddTask = new JMenuItem("Add Task");
         menuItemAddTask.addActionListener((actionEvent) -> {
             AddTaskDialog addTaskDialog = new AddTaskDialog();
+            addTaskDialog.setLocationRelativeTo(this);
             addTaskDialog.setVisible(true);
 
             MessageBus.getInstance().sendMessage(TaskSelectionPanel.class, MessageType.RELOAD_DATA);
             pack();
         });
-        menuSettings.add(menuItemAddTask);
+        menuPreferences.add(menuItemAddTask);
 
         JMenuItem menuItemWorkReport = new JMenuItem("Show Work Report");
         menuItemWorkReport.addActionListener(e -> {
             ReportDialog reportDialog = new ReportDialog();
+            reportDialog.setLocationRelativeTo(this);
             reportDialog.setVisible(true);
         });
-        menuSettings.add(menuItemWorkReport);
+        menuPreferences.add(menuItemWorkReport);
 
-        menuBar.add(menuSettings);
+        JMenuItem menuItemSettingsFile = new JMenuItem("Show Settings");
+        menuItemSettingsFile.addActionListener(e -> {
+            try {
+                String settingsUri = ChronosServiceFactory.createSettings().getSettingsUri();
+                Desktop.getDesktop().open(new File(settingsUri));
+            } catch (URISyntaxException | IOException ex) {
+                /* Do nothing. */
+            }
+        });
+        menuPreferences.add(menuItemSettingsFile);
+
+        menuBar.add(menuPreferences);
 
         return menuBar;
     }

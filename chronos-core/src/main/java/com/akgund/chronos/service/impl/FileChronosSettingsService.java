@@ -1,10 +1,10 @@
 package com.akgund.chronos.service.impl;
 
 import com.akgund.chronos.core.IChronosSerializer;
-import com.akgund.chronos.core.impl.ChronosCoreException;
-import com.akgund.chronos.service.IChronosSettingsService;
 import com.akgund.chronos.core.IChronosURI;
+import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.model.settings.Settings;
+import com.akgund.chronos.service.IChronosSettingsService;
 import com.google.inject.Inject;
 
 import java.io.IOException;
@@ -70,5 +70,10 @@ public class FileChronosSettingsService implements IChronosSettingsService {
         } catch (IOException e) {
             throw new ChronosCoreException("Couldn't write to settings file.", e);
         }
+    }
+
+    @Override
+    public String getSettingsUri() throws URISyntaxException {
+        return chronosURI.getSettingsURI();
     }
 }
