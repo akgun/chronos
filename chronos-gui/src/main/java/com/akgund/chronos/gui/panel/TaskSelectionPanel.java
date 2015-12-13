@@ -9,11 +9,14 @@ import com.akgund.chronos.gui.event.ITaskSelectionEvent;
 import com.akgund.chronos.gui.widget.AbstractComboBoxItem;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.service.IChronosService;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.util.List;
 
 public class TaskSelectionPanel extends JPanel implements IMessageClient {
+    private static final Logger logger = LogManager.getLogger(TaskSelectionPanel.class);
     private IChronosService chronosService = ChronosServiceFactory.create();
     private JComboBox<TaskComboBoxItem> comboBoxTasks = new JComboBox<>();
     private ITaskSelectionEvent taskSelectionEvent;
@@ -73,7 +76,7 @@ public class TaskSelectionPanel extends JPanel implements IMessageClient {
                 comboBoxTasks.setSelectedItem(tasks.stream().findFirst().get());
             }
         } catch (ChronosCoreException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -90,7 +93,7 @@ public class TaskSelectionPanel extends JPanel implements IMessageClient {
 
             return task;
         } catch (ChronosCoreException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
         return task;

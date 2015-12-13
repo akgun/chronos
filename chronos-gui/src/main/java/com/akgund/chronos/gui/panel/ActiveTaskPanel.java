@@ -7,11 +7,14 @@ import com.akgund.chronos.gui.bus.MessageBus;
 import com.akgund.chronos.gui.bus.MessageType;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.service.IChronosService;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ActiveTaskPanel extends JPanel implements IMessageClient {
+    private static final Logger logger = LogManager.getLogger(ActiveTaskPanel.class);
     private IChronosService chronosService = ChronosServiceFactory.create();
     private JLabel activateTaskLabel = new JLabel();
 
@@ -44,7 +47,7 @@ public class ActiveTaskPanel extends JPanel implements IMessageClient {
             }
             activateTaskLabel.setText(String.format("%s", activeTask.getName()));
         } catch (ChronosCoreException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 }

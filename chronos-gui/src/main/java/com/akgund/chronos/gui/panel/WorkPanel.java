@@ -12,6 +12,8 @@ import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.service.IChronosSettingsService;
 import com.akgund.chronos.service.impl.ChronosServiceException;
 import com.akgund.chronos.util.DateTimeHelper;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 import javax.swing.*;
@@ -22,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 public class WorkPanel extends JPanel implements ActionListener {
+    private static final Logger logger = LogManager.getLogger(WorkPanel.class);
     private static Timer totalWorkTimer;
     private IChronosService chronosService = ChronosServiceFactory.create();
     private IChronosSettingsService chronosSettingsService = ChronosServiceFactory.createSettings();
@@ -47,7 +50,7 @@ public class WorkPanel extends JPanel implements ActionListener {
             Settings settings = chronosSettingsService.getSettings();
             startTotalWorkTimer((int) settings.getWorkLogRefreshInterval());
         } catch (ChronosCoreException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -85,9 +88,9 @@ public class WorkPanel extends JPanel implements ActionListener {
             try {
                 chronosService.saveWork(work);
             } catch (ChronosServiceException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             } catch (ChronosCoreException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
 
             updateWorkFilter();
@@ -123,7 +126,7 @@ public class WorkPanel extends JPanel implements ActionListener {
 
                 refreshData();
             } catch (ChronosCoreException e1) {
-                e1.printStackTrace();
+                logger.error(e1.getMessage(), e1);
             }
         });
 
@@ -184,9 +187,9 @@ public class WorkPanel extends JPanel implements ActionListener {
         try {
             filterWorkResponse = chronosService.filterWorks(taskId, filterWorkRequest);
         } catch (ChronosCoreException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         } catch (ChronosServiceException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 

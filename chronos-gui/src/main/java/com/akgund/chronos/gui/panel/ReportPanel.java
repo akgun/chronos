@@ -9,6 +9,8 @@ import com.akgund.chronos.model.report.DateReport;
 import com.akgund.chronos.model.report.WorkReport;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.DateTimeHelper;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
@@ -16,6 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ReportPanel extends JPanel {
+    private static final Logger logger = LogManager.getLogger(ReportPanel.class);
     private IChronosService chronosService = ChronosServiceFactory.create();
     private DateTimeSelector dateTimeSelector;
     private final JTable reportTable;
@@ -56,7 +59,7 @@ public class ReportPanel extends JPanel {
 
             updateLabelTotalDuration(report);
         } catch (ChronosCoreException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 
@@ -74,7 +77,7 @@ public class ReportPanel extends JPanel {
 
             labelTotalDuration.setText(String.format("Total: %s", DateTimeHelper.printDuration(total.toPeriod())));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
     }
 }

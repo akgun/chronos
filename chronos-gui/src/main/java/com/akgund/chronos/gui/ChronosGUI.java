@@ -12,6 +12,8 @@ import com.akgund.chronos.gui.panel.TaskSelectionPanel;
 import com.akgund.chronos.model.settings.Position;
 import com.akgund.chronos.model.settings.Settings;
 import com.akgund.chronos.service.IChronosSettingsService;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class ChronosGUI extends JFrame implements IMessageClient {
+    private static final Logger logger = LogManager.getLogger(ChronosGUI.class);
 
     public ChronosGUI() throws HeadlessException {
         MessageBus.getInstance().register(this);
@@ -42,6 +45,7 @@ public class ChronosGUI extends JFrame implements IMessageClient {
             Position windowPosition = settings.getWindowLastPosition();
             setLocation(windowPosition.getX(), windowPosition.getY());
         } catch (ChronosCoreException e) {
+            logger.error(e.getMessage(), e);
            /* Use default settings. */
         }
     }
@@ -75,6 +79,7 @@ public class ChronosGUI extends JFrame implements IMessageClient {
                 String settingsUri = ChronosServiceFactory.createSettings().getSettingsUri();
                 Desktop.getDesktop().open(new File(settingsUri));
             } catch (URISyntaxException | IOException ex) {
+                logger.error(ex.getMessage(), ex);
                 /* Do nothing. */
             }
         });
@@ -94,6 +99,8 @@ public class ChronosGUI extends JFrame implements IMessageClient {
 }
 
 class ChronosWindowListener implements WindowListener {
+    private static final Logger logger = LogManager.getLogger(ChronosWindowListener.class);
+
     @Override
     public void windowOpened(WindowEvent e) {
 
@@ -109,6 +116,7 @@ class ChronosWindowListener implements WindowListener {
             settings.getWindowLastPosition().setY((int) locationOnScreen.getY());
             settingsService.saveSettings(settings);
         } catch (ChronosCoreException ex) {
+            logger.error(ex.getMessage(), ex);
            /* Do nothing. */
         }
     }

@@ -2,19 +2,22 @@ package com.akgund.chronos.gui.panel;
 
 import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.impl.ChronosCoreException;
-import com.akgund.chronos.gui.dialog.AddWorkDialog;
 import com.akgund.chronos.gui.ChronosGUI;
 import com.akgund.chronos.gui.bus.MessageBus;
 import com.akgund.chronos.gui.bus.MessageType;
+import com.akgund.chronos.gui.dialog.AddWorkDialog;
 import com.akgund.chronos.model.Task;
-import com.akgund.chronos.service.impl.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
+import com.akgund.chronos.service.impl.ChronosServiceException;
 import com.akgund.chronos.util.GUIUtil;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class TasksPanel extends JPanel {
+    private static final Logger logger = LogManager.getLogger(TasksPanel.class);
     private IChronosService chronosService = ChronosServiceFactory.create();
     private JButton buttonActivate = new JButton("Activate");
     private JButton buttonAddWork = new JButton("Add Work");
@@ -74,9 +77,9 @@ public class TasksPanel extends JPanel {
                 }
                 updateActivateButtonText();
             } catch (ChronosCoreException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             } catch (ChronosServiceException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
 
             updateWorkPanel(taskSelectionPanel.getSelectedTask());
