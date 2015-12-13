@@ -102,12 +102,14 @@ public class TasksPanel extends JPanel {
     }
 
     private void updateWorkPanel(Task task) {
+        logger.debug("Updating work panel.");
         workPanel.removeAll();
 
         if (task == null) {
             return;
         }
 
+        logger.debug(String.format("Will update work panel for task: '%s'", task.getName()));
         workPanel.add(new WorkPanel(task.getId()));
         MessageBus.getInstance().sendMessage(ChronosGUI.class, MessageType.PACK);
     }
@@ -116,11 +118,13 @@ public class TasksPanel extends JPanel {
         if (taskSelectionPanel == null) {
             return;
         }
+
         Task selectedTask = taskSelectionPanel.getSelectedTask();
         if (selectedTask == null) {
             return;
         }
 
+        logger.debug(String.format("Will update active button text for task: '%s'", selectedTask.getName()));
         buttonActivate.setText(selectedTask.isActive() ? "Deactivate" : "Activate");
     }
 }

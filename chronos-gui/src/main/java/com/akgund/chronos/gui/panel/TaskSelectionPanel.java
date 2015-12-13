@@ -32,10 +32,15 @@ public class TaskSelectionPanel extends JPanel implements IMessageClient {
         comboBoxTasks.addActionListener((actionEvent) -> {
             TaskComboBoxItem selectedItem = (TaskComboBoxItem) comboBoxTasks.getSelectedItem();
             if (selectedItem == null) {
+                logger.debug("No selected item for tasks combo.");
                 return;
             }
 
-            getTaskSelectionEvent().onSelected(getSelectedTask());
+            final Task selectedTask = selectedItem.getValue();
+
+            logger.debug(String.format("Propagating selected event for task: '%s'",
+                    selectedTask.getName()));
+            getTaskSelectionEvent().onSelected(selectedTask);
         });
 
         createLayout();
@@ -52,6 +57,7 @@ public class TaskSelectionPanel extends JPanel implements IMessageClient {
 
     public ITaskSelectionEvent getTaskSelectionEvent() {
         if (taskSelectionEvent == null) {
+            logger.debug("No task selection event provided.");
             /* Do nothing. */
             taskSelectionEvent = taskId -> {
             };
@@ -65,15 +71,22 @@ public class TaskSelectionPanel extends JPanel implements IMessageClient {
     }
 
     private void fillTasksCombo() {
+        logger.debug("Filling tasks combo.");
+
         try {
             comboBoxTasks.removeAllItems();
-            List<Task> tasks = chronosService.listTasks();
+            final List<Task> tasks = chronosService.listTasks();
             for (Task t : tasks) {
                 comboBoxTasks.addItem(new TaskComboBoxItem(t));
             }
 
-            if (tasks != null && !tasks.isEmpty()) {
-                comboBoxTasks.setSelectedItem(tasks.stream().findFirst().get());
+            final Task activeTask = chronosService.findActiveTask();
+            if (activeTask != null) {
+                logger.debug(String.format("Setting selected task: '%s'", activeTask.getName()));
+
+                setSelectedTask(activeTask);
+            } else {
+                logger.debug("No active task found.");
             }
         } catch (ChronosCoreException e) {
             logger.error(e.getMessage(), e);
@@ -90,6 +103,7 @@ public class TaskSelectionPanel extends JPanel implements IMessageClient {
         Task task = null;
         try {
             task = chronosService.getTask(selectedItem.getValue().getId());
+            logger.debug(String.format("Getting selected task: '%s'", task.getName()));
 
             return task;
         } catch (ChronosCoreException e) {
@@ -97,6 +111,15 @@ public class TaskSelectionPanel extends JPanel implements IMessageClient {
         }
 
         return task;
+    }
+
+    public void setSelectedTask(Task task) {
+        for (int i = 0; i < comboBoxTasks.getItemCount(); i++) {
+            if (task.getName().equals(comboBoxTasks.getItemAt(i).getValue().getName())) {
+                comboBoxTasks.setSelectedIndex(i);
+                break;
+            }
+        }
     }
 
     @Override
