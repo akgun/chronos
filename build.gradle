@@ -2,11 +2,11 @@ ext {
     libs = [guice: 'com.google.inject:guice:4.0',
             gson : 'com.google.code.gson:gson:2.4',
             joda : 'joda-time:joda-time:2.8.2',
-            junit: 'junit:junit:4.12']
+            junit: 'junit:junit:4.12',
+            log4j: 'log4j:log4j:1.2.17']
 
     chronosQualifier = [group: 'com.akgund.chronos', version: '1.0']
 }
-
 
 allprojects {
     group = chronosQualifier.group
@@ -33,6 +33,7 @@ project(':chronos-core') {
         compile libs.guice
         compile libs.gson
         compile libs.joda
+        compile libs.log4j
 
         testCompile libs.junit
     }
@@ -41,6 +42,7 @@ project(':chronos-core') {
 project(':chronos-util') {
     dependencies {
         compile libs.joda
+        compile libs.log4j
 
         testCompile libs.junit
     }
@@ -52,6 +54,7 @@ project(':chronos-gui') {
         compile project(':chronos-util')
 
         compile libs.joda
+        compile libs.log4j
     }
 
     ext {
