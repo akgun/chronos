@@ -12,6 +12,7 @@ import com.akgund.chronos.gui.panel.TaskSelectionPanel;
 import com.akgund.chronos.model.settings.Position;
 import com.akgund.chronos.model.settings.Settings;
 import com.akgund.chronos.service.IChronosSettingsService;
+import com.jcabi.manifests.Manifests;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -28,7 +29,7 @@ public class ChronosGUI extends JFrame implements IMessageClient {
 
     public ChronosGUI() throws HeadlessException {
         MessageBus.getInstance().register(this);
-        setTitle("Chronos Time Tracker");
+        setTitle(String.format("Chronos Time Tracker - %s", getVersion()));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setContentPane(new MainPanel());
         setJMenuBar(createMenu());
@@ -94,6 +95,14 @@ public class ChronosGUI extends JFrame implements IMessageClient {
     public void receiveMessage(MessageType message) {
         if (MessageType.PACK == message) {
             pack();
+        }
+    }
+
+    private String getVersion() {
+        try {
+            return Manifests.read("Chronos-Version");
+        } catch (Exception e) {
+            return "dev";
         }
     }
 }
