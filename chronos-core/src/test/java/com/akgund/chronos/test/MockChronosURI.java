@@ -7,20 +7,6 @@ import java.nio.file.Paths;
 import com.akgund.chronos.core.impl.FileChronosURI;
 
 public class MockChronosURI extends FileChronosURI {
-	@Override
-	public String userHome() {
-		return "";
-	}
-
-	@Override
-	public String chronosFolder() {
-		return "";
-	}
-
-	@Override
-	public String chronosDataFile() {
-		return "";
-	}
 
 	@Override
 	public String getDataURI() throws URISyntaxException {
