@@ -11,6 +11,7 @@ public class DateTimeSerializer implements JsonSerializer<DateTime>, JsonDeseria
     @Override
     public DateTime deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         String string = jsonElement.getAsJsonObject().get("dateTime").getAsString();
+
         return ISODateTimeFormat.dateTime().parseDateTime(string);
     }
 

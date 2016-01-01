@@ -3,8 +3,10 @@ ext {
             gson : 'com.google.code.gson:gson:2.4',
             joda : 'joda-time:joda-time:2.8.2',
             junit: 'junit:junit:4.12',
+            hamcrest: 'org.hamcrest:hamcrest-all:1.3',
             log4j: 'log4j:log4j:1.2.17',
-            manifests: 'com.jcabi:jcabi-manifests:1.1']
+            manifests: 'com.jcabi:jcabi-manifests:1.1',
+            mockito : 'org.mockito:mockito-core:1.10.19']
 
     chronosQualifier = [group: 'com.akgund.chronos', version: '1.0.1']
 }
@@ -37,6 +39,8 @@ project(':chronos-core') {
         compile libs.log4j
 
         testCompile libs.junit
+        testCompile libs.hamcrest
+        testCompile libs.mockito
     }
 }
 
@@ -46,6 +50,8 @@ project(':chronos-util') {
         compile libs.log4j
 
         testCompile libs.junit
+        testCompile libs.hamcrest
+        testCompile libs.mockito
     }
 }
 
