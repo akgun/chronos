@@ -124,7 +124,6 @@ public class ChronosService implements IChronosService {
             task.getWorkList().add(work);
         }
 
-
         saveTask(task);
     }
 

@@ -15,6 +15,7 @@ public class WorkTableModel extends AbstractTableModel {
     private List<Work> workList = new ArrayList<>();
     private IWorkUpdateEvent workUpdateEvent = work -> {
     };
+    private DateTimeHelper dateTimeHelper = DateTimeHelper.getInstance();
 
     public WorkTableModel() {
     }
@@ -37,16 +38,16 @@ public class WorkTableModel extends AbstractTableModel {
 
         Period duration = Period.millis(-1);
         if (end != null) {
-            duration = DateTimeHelper.getDiff(start, end);
+            duration = dateTimeHelper.getDiff(start, end);
         }
 
         switch (columnIndex) {
             case 0:
-                return DateTimeHelper.printDate(work.getStart());
+                return dateTimeHelper.printDate(work.getStart());
             case 1:
-                return end != null ? DateTimeHelper.printDate(end) : "current";
+                return end != null ? dateTimeHelper.printDate(end) : "current";
             case 2:
-                return DateTimeHelper.printDuration(duration);
+                return dateTimeHelper.printDuration(duration);
         }
 
         return null;
@@ -58,10 +59,10 @@ public class WorkTableModel extends AbstractTableModel {
 
         switch (columnIndex) {
             case 0:
-                work.setStart(DateTimeHelper.parseDate("" + aValue));
+                work.setStart(dateTimeHelper.parseDate("" + aValue));
                 break;
             case 1:
-                work.setEnd(DateTimeHelper.parseDate("" + aValue));
+                work.setEnd(dateTimeHelper.parseDate("" + aValue));
                 break;
         }
 

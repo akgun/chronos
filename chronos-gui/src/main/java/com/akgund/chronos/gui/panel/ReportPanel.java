@@ -24,6 +24,7 @@ public class ReportPanel extends JPanel {
     private final JTable reportTable;
     private ReportTableModel reportTableModel;
     private JLabel labelTotalDuration;
+    private DateTimeHelper dateTimeHelper = DateTimeHelper.getInstance();
 
     public ReportPanel() {
         setLayout(new BorderLayout());
@@ -75,7 +76,7 @@ public class ReportPanel extends JPanel {
                 total = total.plus(new Duration(start, end));
             }
 
-            labelTotalDuration.setText(String.format("Total: %s", DateTimeHelper.printDuration(total.toPeriod())));
+            labelTotalDuration.setText(String.format("Total: %s", dateTimeHelper.printDuration(total.toPeriod())));
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

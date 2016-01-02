@@ -35,6 +35,7 @@ public class WorkPanel extends JPanel implements ActionListener {
     private JLabel labelDailyTask = new JLabel();
     private WorkTableModel workTableModel = new WorkTableModel();
     private FilterWorkResponse filterWorkResponse;
+    private DateTimeHelper dateTimeHelper = DateTimeHelper.getInstance();
 
     public WorkPanel(Long taskId) {
         setLayout(new BorderLayout());
@@ -172,7 +173,7 @@ public class WorkPanel extends JPanel implements ActionListener {
 
     private void updateTotalTaskLabel() {
         String dailyTask = String.format("Total: %s",
-                DateTimeHelper.printDuration(filterWorkResponse.getTotalDuration().toPeriod()));
+                dateTimeHelper.printDuration(filterWorkResponse.getTotalDuration().toPeriod()));
         labelDailyTask.setText(dailyTask);
     }
 

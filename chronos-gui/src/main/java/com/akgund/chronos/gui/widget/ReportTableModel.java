@@ -12,6 +12,7 @@ import java.util.List;
 public class ReportTableModel extends AbstractTableModel {
     private static final String[] COLUMNS = {"Task", "Start", "End", "Duration"};
     private DateReport dateReport;
+    private DateTimeHelper dateTimeHelper = DateTimeHelper.getInstance();
 
     public ReportTableModel() {
         this(new DateReport());
@@ -51,11 +52,11 @@ public class ReportTableModel extends AbstractTableModel {
             case 0:
                 return workReport.getTaskName();
             case 1:
-                return DateTimeHelper.printDate(start);
+                return dateTimeHelper.printDate(start);
             case 2:
-                return DateTimeHelper.printDate(end);
+                return dateTimeHelper.printDate(end);
             case 3:
-                return DateTimeHelper.printDuration(DateTimeHelper.getDiff(start, end));
+                return dateTimeHelper.printDuration(dateTimeHelper.getDiff(start, end));
         }
 
         return "";

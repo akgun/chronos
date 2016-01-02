@@ -9,10 +9,17 @@ import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
 public class DateTimeHelper {
-
     private static final String DATE_TIME_FORMAT = "dd/MM HH:mm";
+    private static final DateTimeHelper INSTANCE = new DateTimeHelper();
 
-    public static String printDuration(Period period) {
+    private DateTimeHelper() {
+    }
+
+    public static DateTimeHelper getInstance() {
+        return INSTANCE;
+    }
+
+    public String printDuration(Period period) {
         PeriodFormatter formatter = new PeriodFormatterBuilder()
                 .appendDays().appendSuffix(" days ")
                 .appendHours().appendSuffix(" hours ")
@@ -23,11 +30,11 @@ public class DateTimeHelper {
         return formatter.print(period).trim();
     }
 
-    public static String printDate(DateTime dateTime) {
+    public String printDate(DateTime dateTime) {
         return DateTimeFormat.forPattern(DATE_TIME_FORMAT).print(dateTime);
     }
 
-    public static DateTime parseDate(String dateStr) {
+    public DateTime parseDate(String dateStr) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern(DATE_TIME_FORMAT);
 
         DateTime dateTime = dateTimeFormatter.parseDateTime(dateStr);
@@ -36,7 +43,7 @@ public class DateTimeHelper {
         return dateTime;
     }
 
-    public static Period getDiff(DateTime dateTime1, DateTime dateTime2) {
+    public Period getDiff(DateTime dateTime1, DateTime dateTime2) {
         return new Period(dateTime1, dateTime2);
     }
 }
