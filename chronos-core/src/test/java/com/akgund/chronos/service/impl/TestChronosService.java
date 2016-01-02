@@ -1,4 +1,4 @@
-package com.akgund.chronos.test;
+package com.akgund.chronos.service.impl;
 
 import com.akgund.chronos.core.IChronosTasksDAL;
 import com.akgund.chronos.core.impl.ChronosCoreException;
