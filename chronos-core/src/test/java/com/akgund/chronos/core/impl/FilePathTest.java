@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.nio.file.Path;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -31,8 +31,7 @@ public class FilePathTest {
 
         final Path dataPath = filePath.getDataPath();
 
-        assertThat(dataPath.toString(),
-                equalTo("/home/akgun/.chronos/data.json"));
+        assertThat(dataPath.toString(), endsWith("data.json"));
     }
 
     @Test
@@ -42,7 +41,6 @@ public class FilePathTest {
 
         final Path settingsPath = filePath.getSettingsPath();
 
-        assertThat(settingsPath.toString(),
-                equalTo("/home/akgun/.chronos/settings.json"));
+        assertThat(settingsPath.toString(), endsWith("settings.json"));
     }
 }
