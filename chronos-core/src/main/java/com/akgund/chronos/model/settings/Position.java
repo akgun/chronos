@@ -5,10 +5,6 @@ public class Position {
     private int y;
 
     public int getX() {
-        if (x < 0) {
-            return 0;
-        }
-        
         return x;
     }
 
@@ -21,10 +17,6 @@ public class Position {
     }
 
     public int getY() {
-        if (y < 0) {
-            return 0;
-        }
-
         return y;
     }
 
