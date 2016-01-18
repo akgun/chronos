@@ -6,7 +6,7 @@ ext {
             hamcrest : 'org.hamcrest:hamcrest-all:1.3',
             log4j    : 'log4j:log4j:1.2.17',
             manifests: 'com.jcabi:jcabi-manifests:1.1',
-            mockito  : 'org.mockito:mockito-core:1.10.19']
+            mockito  : 'org.mockito:mockito-all:1.10.19']
 
     chronosQualifier = [group: 'com.akgund.chronos', version: '1.0.1']
 }
