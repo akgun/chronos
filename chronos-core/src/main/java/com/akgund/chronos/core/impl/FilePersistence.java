@@ -8,26 +8,26 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class FilePersistence implements IPersistence {
     private IChronosURI chronosURI;
+    private IPathService pathService;
 
     @Inject
-    public FilePersistence(IChronosURI chronosURI) {
+    public FilePersistence(IChronosURI chronosURI, IPathService pathService) {
         this.chronosURI = chronosURI;
+        this.pathService = pathService;
     }
 
     @Override
     public String read() throws ChronosCoreException {
         try {
             final String uri = chronosURI.getDataURI();
-            final Path path = Paths.get(uri);
+            final Path path = pathService.getPath(uri);
 
-            /* Create file if does not exists. */
-            if (!Files.exists(path)) {
-                throw new ChronosCoreException("File not exists");
+            if (!pathService.exists(path)) {
+                throw new ChronosCoreException("File not found.");
             }
 
             return new String(Files.readAllBytes(path));
@@ -42,11 +42,10 @@ public class FilePersistence implements IPersistence {
     public void write(String data) throws ChronosCoreException {
         try {
             final String uri = chronosURI.getDataURI();
-            final Path path = Paths.get(uri);
+            final Path path = pathService.getPath(uri);
 
-            if (!Files.exists(path)) {
-                Files.createDirectories(path.getParent());
-                Files.createFile(path);
+            if (!pathService.exists(path)) {
+                pathService.createFile(path);
             }
 
             Files.write(path, data.getBytes(), StandardOpenOption.TRUNCATE_EXISTING,
