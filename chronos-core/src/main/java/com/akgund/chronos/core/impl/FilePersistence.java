@@ -12,8 +12,12 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class FilePersistence implements IPersistence {
-    @Inject
     private IChronosURI chronosURI;
+
+    @Inject
+    public FilePersistence(IChronosURI chronosURI) {
+        this.chronosURI = chronosURI;
+    }
 
     @Override
     public String read() throws ChronosCoreException {
