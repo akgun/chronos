@@ -1,6 +1,7 @@
 package com.akgund.chronos.core.impl;
 
 import com.akgund.chronos.core.IChronosURI;
+import com.akgund.chronos.core.IPathService;
 import com.akgund.chronos.core.IPersistence;
 import com.google.inject.Inject;
 
