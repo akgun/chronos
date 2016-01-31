@@ -10,8 +10,8 @@ import com.akgund.chronos.model.Task;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.service.impl.ChronosServiceException;
 import com.akgund.chronos.util.GUIUtil;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;

@@ -12,8 +12,8 @@ import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.service.IChronosSettingsService;
 import com.akgund.chronos.service.impl.ChronosServiceException;
 import com.akgund.chronos.util.DateTimeHelper;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 
 import javax.swing.*;

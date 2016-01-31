@@ -13,8 +13,8 @@ import com.akgund.chronos.model.settings.Position;
 import com.akgund.chronos.model.settings.Settings;
 import com.akgund.chronos.service.IChronosSettingsService;
 import com.jcabi.manifests.Manifests;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;

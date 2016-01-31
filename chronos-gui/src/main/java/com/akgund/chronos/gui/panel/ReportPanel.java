@@ -9,8 +9,8 @@ import com.akgund.chronos.model.report.DateReport;
 import com.akgund.chronos.model.report.WorkReport;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.DateTimeHelper;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
