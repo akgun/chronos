@@ -15,6 +15,7 @@ import com.akgund.chronos.util.DateTimeHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,6 +29,7 @@ public class WorkPanel extends JPanel implements ActionListener {
     private static Timer totalWorkTimer;
     private IChronosService chronosService = ChronosServiceFactory.create();
     private IChronosSettingsService chronosSettingsService = ChronosServiceFactory.createSettings();
+    private JComboBox<WorkDaySelectionItem> comboYearSelection = new JComboBox<>();
     private JComboBox<WorkDaySelectionItem> comboMonthSelection = new JComboBox<>();
     private JComboBox<WorkDaySelectionItem> comboDaySelection = new JComboBox<>();
     private JTable tableWorkList = new JTable();
@@ -78,6 +80,7 @@ public class WorkPanel extends JPanel implements ActionListener {
     }
 
     private void initHandlers() {
+        comboYearSelection.addActionListener(this);
         comboDaySelection.addActionListener(this);
         comboMonthSelection.addActionListener(this);
 
@@ -149,6 +152,14 @@ public class WorkPanel extends JPanel implements ActionListener {
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.X_AXIS));
 
+        LocalDate now = LocalDate.now();
+        jPanel.add(new JLabel("Year: "));
+        final int oldestYearIndex = 10;
+        for (int i = 0; i < oldestYearIndex; i++) {
+            comboYearSelection.addItem(new WorkDaySelectionItem(now.getYear() - i));
+        }
+        jPanel.add(comboYearSelection);
+
         jPanel.add(new JLabel("Month: "));
         comboMonthSelection.addItem(new WorkDaySelectionItem(null));
         IntStream.range(1, 13).forEach(value ->
@@ -178,10 +189,12 @@ public class WorkPanel extends JPanel implements ActionListener {
     }
 
     private void updateWorkFilter() {
+        final Integer selectedYear = getSelectedYear();
         final Integer selectedMonth = getSelectedMonth();
         final Integer selectedDay = getSelectedDay();
 
         FilterWorkRequest filterWorkRequest = new FilterWorkRequest();
+        filterWorkRequest.setYear(selectedYear);
         filterWorkRequest.setMonth(selectedMonth);
         filterWorkRequest.setDay(selectedDay);
 
@@ -192,6 +205,15 @@ public class WorkPanel extends JPanel implements ActionListener {
         } catch (ChronosServiceException e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    private Integer getSelectedYear() {
+        Object selectedItem = comboYearSelection.getSelectedItem();
+        if (selectedItem == null) {
+            return null;
+        }
+
+        return ((WorkDaySelectionItem) selectedItem).getValue();
     }
 
     private Integer getSelectedMonth() {
