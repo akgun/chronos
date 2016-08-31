@@ -102,6 +102,7 @@ public class ChronosGUI extends JFrame implements IMessageClient {
         try {
             return Manifests.read("Chronos-Version");
         } catch (Exception e) {
+            logger.debug("Could not read manifest.");
             return "dev";
         }
     }

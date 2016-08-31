@@ -8,9 +8,10 @@ import com.akgund.chronos.model.Work;
 import com.akgund.chronos.model.report.DateReport;
 import com.akgund.chronos.service.impl.ChronosServiceException;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface IChronosService {
+public interface IChronosService extends Serializable {
 
     List<Task> listTasks() throws ChronosCoreException;
 

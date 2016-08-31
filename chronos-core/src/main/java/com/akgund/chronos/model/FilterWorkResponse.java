@@ -2,10 +2,11 @@ package com.akgund.chronos.model;
 
 import org.joda.time.Duration;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterWorkResponse {
+public class FilterWorkResponse implements Serializable {
     private List<Work> workList;
     private Duration totalDuration;
 

@@ -6,8 +6,12 @@ import com.akgund.chronos.core.IChronosTasksDAL;
 import com.akgund.chronos.core.IPersistence;
 import com.akgund.chronos.model.ChronosTasks;
 import com.google.inject.Inject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FileChronosTasksDAL implements IChronosTasksDAL {
+    private static final Logger logger = LogManager.getLogger(FileChronosTasksDAL.class);
+
     @Inject
     private IChronosSerializer chronosSerializer;
     @Inject
@@ -24,6 +28,7 @@ public class FileChronosTasksDAL implements IChronosTasksDAL {
 
             return chronosSerializer.deserializeData(chronosTasksStr);
         } catch (ChronosCoreException e) {
+            logger.debug("No tasks. Creating.");
             return new ChronosTasks();
         }
     }

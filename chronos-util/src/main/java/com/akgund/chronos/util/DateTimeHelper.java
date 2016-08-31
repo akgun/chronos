@@ -8,7 +8,9 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.PeriodFormatter;
 import org.joda.time.format.PeriodFormatterBuilder;
 
-public class DateTimeHelper {
+import java.io.Serializable;
+
+public class DateTimeHelper implements Serializable {
     private static final String DATE_TIME_FORMAT = "dd/MM HH:mm";
     private static final DateTimeHelper INSTANCE = new DateTimeHelper();
 
