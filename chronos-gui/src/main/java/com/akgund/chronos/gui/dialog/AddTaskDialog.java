@@ -4,12 +4,16 @@ import com.akgund.chronos.ChronosServiceFactory;
 import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.service.IChronosService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class AddTaskDialog extends JDialog {
-    private IChronosService chronosService =  ChronosServiceFactory.create();
+    private static final Logger logger = LogManager.getLogger(AddTaskDialog.class);
+
+    private IChronosService chronosService = ChronosServiceFactory.create();
     private JTextField textFieldName = new JTextField(20);
 
     public AddTaskDialog() {
@@ -46,7 +50,7 @@ public class AddTaskDialog extends JDialog {
                 chronosService.saveTask(task);
                 AddTaskDialog.this.dispose();
             } catch (ChronosCoreException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage(), e);
             }
         });
 

@@ -125,7 +125,7 @@ public class WorkPanel extends JPanel implements ActionListener {
                 try {
                     chronosService.deleteWork(toDeleteWork.getTaskId(), toDeleteWork.getId());
                 } catch (ChronosServiceException e1) {
-                    e1.printStackTrace();
+                    logger.error(e1.getMessage(), e1);
                 }
 
                 refreshData();

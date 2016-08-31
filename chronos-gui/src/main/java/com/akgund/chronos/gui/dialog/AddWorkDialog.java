@@ -5,14 +5,17 @@ import com.akgund.chronos.core.impl.ChronosCoreException;
 import com.akgund.chronos.gui.widget.DateTimeSelector;
 import com.akgund.chronos.model.Task;
 import com.akgund.chronos.model.Work;
-import com.akgund.chronos.service.impl.ChronosServiceException;
 import com.akgund.chronos.service.IChronosService;
 import com.akgund.chronos.util.GUIUtil;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class AddWorkDialog extends JDialog {
+    private static final Logger logger = LogManager.getLogger(AddWorkDialog.class);
+
     private IChronosService chronosService = ChronosServiceFactory.create();
     private Task task;
     private DateTimeSelector timeSelectorStart = new DateTimeSelector(true, true);
@@ -23,7 +26,7 @@ public class AddWorkDialog extends JDialog {
         try {
             this.task = chronosService.getTask(taskId);
         } catch (ChronosCoreException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
             dispose();
         }
 
@@ -94,10 +97,8 @@ public class AddWorkDialog extends JDialog {
             try {
                 chronosService.saveWork(newWork);
                 dispose();
-            } catch (ChronosServiceException e1) {
-                e1.printStackTrace();
-            } catch (ChronosCoreException e1) {
-                e1.printStackTrace();
+            } catch (Exception e1) {
+                logger.error(e1.getMessage(), e1);
             }
         });
     }
